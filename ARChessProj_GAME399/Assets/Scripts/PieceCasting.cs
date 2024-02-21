@@ -11,6 +11,8 @@ public class PieceCasting : MonoBehaviour
     public Button confirmSelectionButton;
     private TMP_Text buttonText;
 
+    private Material prevMat;
+
     private GameObject objectSelected;
 
     RaycastHit hit;
@@ -33,8 +35,14 @@ public class PieceCasting : MonoBehaviour
 
         if(didHit)
         {
-            Debug.Log("The Raycast hit " + hit.collider.gameObject.name);
-            confirmSelectionButton.gameObject.SetActive(true);
+            if(hit.collider.gameObject != objectSelected)
+            {
+                Debug.Log("The Raycast hit " + hit.collider.gameObject.name);
+                confirmSelectionButton.gameObject.SetActive(true);
+
+                SelectingPiece(hit.collider.gameObject);
+            }
+            
             return hit.collider.gameObject;
         }
 
@@ -42,5 +50,14 @@ public class PieceCasting : MonoBehaviour
         return null;
     }
 
+    void SelectingPiece(GameObject gameObject)
+    {
+        if(objectSelected)
+        {
+            objectSelected.GetComponent<Highlight>().SetHighlighted(false);
+        }
 
+        gameObject.GetComponent<Highlight>().SetHighlighted(true);
+        objectSelected = gameObject;
+    }
 }

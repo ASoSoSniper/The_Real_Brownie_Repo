@@ -52,7 +52,7 @@ public class ChessPiece : MonoBehaviour
         if (!currentTile)
         {
             GroundCheck();
-            CreatePossibleRoutes();
+            //CreatePossibleRoutes();
         }
     }
     public virtual List<List<GameObject>> CreatePossibleRoutes()
