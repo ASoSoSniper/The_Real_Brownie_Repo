@@ -64,6 +64,24 @@ public class ChessGrid : MonoBehaviour
         }
         return null;
     }
+    public bool TileExists(int x, int z)
+    {
+        if (x < Mathf.Sqrt(tiles.Length) && z < Mathf.Sqrt(tiles.Length))
+        {
+            if (tiles[x, z] != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public GameObject GetTile(int x, int z)
+    {
+        if (!TileExists(x, z)) return null;
+
+        return tiles[x, z];
+    }
 
     public void GetTileCoordinates(GameObject tile, out int tileX, out int tileZ)
     {
@@ -92,5 +110,18 @@ public class ChessGrid : MonoBehaviour
         if (hit) return true;
 
         return false;
+    }
+
+    public ChessPiece.Teams GetPieceOnTile(GameObject tile)
+    {
+        RaycastHit result;
+        bool hit = Physics.Raycast(tile.transform.position, Vector3.up, out result, 5f);
+
+        if (!hit) return ChessPiece.Teams.None;
+
+        ChessPiece piece = result.collider.transform.GetComponent<ChessPiece>();
+        if (piece) return piece.team;
+
+        return ChessPiece.Teams.None;
     }
 }
