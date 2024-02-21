@@ -118,6 +118,7 @@ GameObject:
   - component: {fileID: 4242117870698697583}
   - component: {fileID: 9117111824050094980}
   - component: {fileID: 4541871056260042588}
+  - component: {fileID: -6387180847331544602}
   m_Layer: 0
   m_Name: Pawn
   m_TagString: Untagged
@@ -197,6 +198,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c89fa69b8640054da7f97a1b63732e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
+  team: 0
+  maxTileMoves: 1
+  movePath: []
+  raisedHeight: 10
+  raiseTime: 1
+  moveTime: 0.5
+  currentTile: {fileID: 0}
+  groundCheckDistance: 8
+--- !u!114 &-6387180847331544602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493590853267408375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99e2681380d2ee148a1387fd248df299, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightedMaterial: {fileID: 2100000, guid: ed3df56c2384bc14abe7cc2ca61b97ac, type: 2}
 --- !u!1 &5893359956923410363
 GameObject:
   m_ObjectHideFlags: 0
