@@ -72,11 +72,15 @@ public class ChessPiece : MonoBehaviour
 
         for (int i = 0; i < possibleRoutes.Count; i++)
         {
-            if (tile == possibleRoutes[i][possibleRoutes[i].Count - 1])
+            for (int j = 0; j < possibleRoutes[i].Count; j++)
             {
-                selectedRouteIndex = i;
-                break;
+                if (tile == possibleRoutes[i][j])
+                {
+                    selectedRouteIndex = i;
+                    break;
+                }
             }
+            
         }
         selectedRoute = possibleRoutes[selectedRouteIndex];
         moving = true;
@@ -87,57 +91,13 @@ public class ChessPiece : MonoBehaviour
         return possibleRoutes;
     }
 
-    bool CanMoveToTile(GameObject selectedTile)
-    {
-        bool hasEnemy = grid.TileHasEnemy(selectedTile);
-        float dot;
-        Vector3 referenceDirection = Vector3.zero;
-        Vector3 directionToTarget = currentTile.transform.position - selectedTile.transform.position;
-        directionToTarget.Normalize();
-
-        referenceDirection = GetReferenceVector(directionToTarget);
-
-        dot = Vector3.Dot(referenceDirection, directionToTarget);
-
-        switch (type)
-        {
-            case PieceType.Pawn:
-                if (dot == 1f && !hasEnemy) return true;
-                
-                break;
-        }
-
-        return false;
-    }
-
-    Vector3 GetReferenceVector(Vector3 direction)
-    {
-        if (direction.z > 0.5f)
-        {
-            return Vector3.forward;
-        }
-        else if (direction.z < 0.5f)
-        {
-            return Vector3.back;
-        }
-
-        if (direction.x > 0.5f)
-        {
-            return Vector3.right;
-        }
-        else if (direction.x < 0.5f)
-        {
-            return Vector3.left;
-        }
-
-        return Vector3.zero;
-    }
-    void Move()
+    public virtual void Move()
     {
         if (!moving) return;
 
-        Vector3 startPoint = transform.position; //possibleRoutes[selectedRouteIndex][0].transform.GetChild(0).position;
+        Vector3 startPoint = transform.position;
         Vector3 endPoint = possibleRoutes[selectedRouteIndex][possibleRoutes[selectedRouteIndex].Count - 1].transform.GetChild(0).position;
+        //endPoint.y = 1f;
         float time = moveTime * possibleRoutes[selectedRouteIndex].Count;
 
         transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
@@ -153,7 +113,7 @@ public class ChessPiece : MonoBehaviour
     {
         RaycastHit rayHit;
         Ray ray = new Ray();
-        ray.origin = transform.position;
+        ray.origin = transform.position + Vector3.up * 2f;
         ray.direction = Vector3.down;
 
         bool hit = Physics.Raycast(ray, out rayHit, groundCheckDistance);
@@ -164,6 +124,6 @@ public class ChessPiece : MonoBehaviour
         currentTile = grid.GetTile(rayHit.collider.gameObject);
 
         if (currentTile == null) return;
-        transform.position = currentTile.transform.position + Vector3.up * 2f;
+        transform.position = currentTile.transform.position;
     }
 }
