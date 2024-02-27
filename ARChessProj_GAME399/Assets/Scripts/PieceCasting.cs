@@ -165,6 +165,6 @@ public class PieceCasting : MonoBehaviour
         // Rotate the cube by converting the angles into a quaternion.
         Quaternion target = Quaternion.Euler((float)tiltAroundX, (float)tiltAroundY, 0);
 
-        gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 2.0f);
+        //gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 2.0f);
     }
 }

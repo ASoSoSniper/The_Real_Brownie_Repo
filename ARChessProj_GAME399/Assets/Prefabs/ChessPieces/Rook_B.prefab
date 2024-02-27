@@ -351,6 +351,7 @@ GameObject:
   - component: {fileID: 4242117870698697583}
   - component: {fileID: -5569988524065096678}
   - component: {fileID: 2991558659443838385}
+  - component: {fileID: -5681940223229411949}
   m_Layer: 0
   m_Name: Rook_B
   m_TagString: Untagged
@@ -412,6 +413,26 @@ CapsuleCollider:
   m_Height: 4.3110237
   m_Direction: 1
   m_Center: {x: 0, y: 1.2627228, z: 0}
+--- !u!114 &-5681940223229411949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493590853267408375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f1feb9cc6868346864204e716ac52a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 4
+  team: 2
+  raisedHeight: 10
+  raiseTime: 1
+  moveTime: 2
+  currentTile: {fileID: 0}
+  groundCheckDistance: 8
+  selectedRoute: []
 --- !u!1 &5893359956923410363
 GameObject:
   m_ObjectHideFlags: 0

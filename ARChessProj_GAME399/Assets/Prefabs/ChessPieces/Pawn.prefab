@@ -132,15 +132,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c89fa69b8640054da7f97a1b63732e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
-  team: 0
-  maxTileMoves: 1
-  movePath: []
+  type: 1
+  team: 1
   raisedHeight: 10
   raiseTime: 1
   moveTime: 0.5
   currentTile: {fileID: 0}
   groundCheckDistance: 8
+  selectedRoute: []
 --- !u!114 &-6387180847331544602
 MonoBehaviour:
   m_ObjectHideFlags: 0

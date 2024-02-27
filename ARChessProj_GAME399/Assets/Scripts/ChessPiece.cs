@@ -37,6 +37,7 @@ public class ChessPiece : MonoBehaviour
     [SerializeField] List<GameObject> selectedRoute = new List<GameObject>();
 
     int selectedRouteIndex = 0;
+    int selectedTileIndex = 0;
     bool moving;
 
     // Start is called before the first frame update
@@ -69,21 +70,27 @@ public class ChessPiece : MonoBehaviour
     public void SelectRoute(GameObject gameObject)
     {
         GameObject tile = grid.GetTile(gameObject);
+        bool validDestination = false;
 
         for (int i = 0; i < possibleRoutes.Count; i++)
         {
-            for (int j = 0; j < possibleRoutes[i].Count; j++)
+            for (int j = 1; j < possibleRoutes[i].Count; j++)
             {
-                if (tile == possibleRoutes[i][j])
+                if (tile == possibleRoutes[i][j].transform.GetChild(0).gameObject)
                 {
                     selectedRouteIndex = i;
+                    selectedTileIndex = j;
+                    validDestination = true;
                     break;
                 }
             }
-            
         }
-        selectedRoute = possibleRoutes[selectedRouteIndex];
-        moving = true;
+
+        if (validDestination)
+        {
+            selectedRoute = possibleRoutes[selectedRouteIndex];
+            moving = true;
+        }
     }
     public virtual List<List<GameObject>> CreatePossibleRoutes()
     {
@@ -96,12 +103,11 @@ public class ChessPiece : MonoBehaviour
         if (!moving) return;
 
         Vector3 startPoint = transform.position;
-        Vector3 endPoint = possibleRoutes[selectedRouteIndex][possibleRoutes[selectedRouteIndex].Count - 1].transform.GetChild(0).position;
-        //endPoint.y = 1f;
-        float time = moveTime * possibleRoutes[selectedRouteIndex].Count;
+        Vector3 endPoint = possibleRoutes[selectedRouteIndex][selectedTileIndex].transform.GetChild(0).position;
+
+        float time = moveTime * selectedTileIndex;
 
         transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
-        //Debug.Log(Vector3.Distance(transform.position, endPoint));
         if (Vector3.Distance(transform.position, endPoint) < 0.0001f)
         {
             currentTile = null;
