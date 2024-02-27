@@ -66,7 +66,11 @@ public class ChessGrid : MonoBehaviour
     }
     public bool TileExists(int x, int z)
     {
-        if (x < Mathf.Sqrt(tiles.Length) && z < Mathf.Sqrt(tiles.Length))
+        bool validX = x >= 0 && x < Mathf.Sqrt(tiles.Length);
+        bool validZ = z >= 0 && z < Mathf.Sqrt(tiles.Length);
+
+        //Debug.Log(x + " = " + validX + ", " + z + " = " + validZ);
+        if (validX && validZ)
         {
             if (tiles[x, z] != null)
             {

@@ -13,9 +13,17 @@ public class PieceCasting : MonoBehaviour
 
     private Material prevMat;
 
-    private GameObject objectSelected;
+    [SerializeField] private GameObject objectHovered;
+    [SerializeField] ChessPiece selectedChessPiece;
 
     RaycastHit hit;
+
+    public enum SelectionMode
+    {
+        Piece,
+        Tile
+    }
+    public SelectionMode selectionMode = SelectionMode.Piece;
 
     private void Start()
     {
@@ -26,6 +34,12 @@ public class PieceCasting : MonoBehaviour
     void Update()
     {
         CastingForPieces();
+
+        //Debug
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SelectObject();
+        }
     }
 
     GameObject CastingForPieces()
@@ -35,12 +49,15 @@ public class PieceCasting : MonoBehaviour
 
         if(didHit)
         {
-            if(hit.collider.gameObject != objectSelected)
+            if(hit.collider.gameObject != objectHovered)
             {
-                Debug.Log("The Raycast hit " + hit.collider.gameObject.name);
-                confirmSelectionButton.gameObject.SetActive(true);
+                if (CorrectSelectionMode(hit.collider.gameObject))
+                {
+                    Debug.Log("The Raycast hit " + hit.collider.gameObject.name);
+                    confirmSelectionButton.gameObject.SetActive(true);
 
-                SelectingPiece(hit.collider.gameObject);
+                    HoverOverObject(hit.collider.gameObject);
+                }
             }
             
             return hit.collider.gameObject;
@@ -50,14 +67,72 @@ public class PieceCasting : MonoBehaviour
         return null;
     }
 
-    void SelectingPiece(GameObject gameObject)
+    void HoverOverObject(GameObject gameObject)
     {
-        if(objectSelected)
+        if(objectHovered)
         {
-            objectSelected.GetComponent<Highlight>().SetHighlighted(false);
+            objectHovered.GetComponent<Highlight>().SetHighlighted(false);
         }
 
         gameObject.GetComponent<Highlight>().SetHighlighted(true);
-        objectSelected = gameObject;
+        objectHovered = gameObject;
+    }
+
+    public void SelectObject()
+    {
+        if (!objectHovered) return;
+
+        ChessPiece piece = GetChessPiece(objectHovered);
+
+        if (piece && selectionMode == SelectionMode.Piece)
+        {
+            selectedChessPiece = piece;
+            selectedChessPiece.SelectPiece();
+            selectionMode = SelectionMode.Tile;
+        }
+        else if (!piece && selectionMode == SelectionMode.Tile)
+        {
+            if (selectedChessPiece)
+            {
+                selectedChessPiece.SelectRoute(objectHovered);
+            }
+            selectionMode = SelectionMode.Piece;
+        }
+    }
+
+    bool CorrectSelectionMode(GameObject gameObject)
+    {
+        if (GetChessPiece(gameObject))
+        {
+            if (selectionMode == SelectionMode.Piece) return true;
+
+            return false;
+        }
+        else
+        {
+            if (selectionMode == SelectionMode.Tile) return true;
+
+            return false;
+        }
+    }
+
+    ChessPiece GetChessPiece(GameObject gameObject)
+    {
+        ChessPiece piece = null;
+
+        if (piece = gameObject.GetComponent<ChessPiece>())
+        {
+            return piece;
+        }
+        else if (piece = gameObject.GetComponentInParent<ChessPiece>())
+        {
+            return piece;
+        }
+        else if (piece = gameObject.GetComponentInChildren<ChessPiece>())
+        {
+            return piece;
+        }
+
+        return piece;
     }
 }

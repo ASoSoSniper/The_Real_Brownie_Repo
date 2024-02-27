@@ -43,6 +43,19 @@ public class Piece_Pawn : ChessPiece
             allRoutes.Add(route3);
         }
 
+        foreach (GameObject tile in route1)
+        {
+            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
+        }
+        foreach (GameObject tile in route2)
+        {
+            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
+        }
+        foreach (GameObject tile in route3)
+        {
+            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
+        }
+
         return allRoutes;
     }
 }

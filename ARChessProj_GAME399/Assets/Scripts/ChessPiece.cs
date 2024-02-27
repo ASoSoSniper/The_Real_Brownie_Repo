@@ -24,9 +24,6 @@ public class ChessPiece : MonoBehaviour
 
     public PieceType type;
     public Teams team;
-    [SerializeField] int maxTileMoves = 1;
-
-    [SerializeField] List<Vector3> movePath = new List<Vector3>();
 
     [SerializeField] float raisedHeight = 10f;
 
@@ -36,8 +33,11 @@ public class ChessPiece : MonoBehaviour
     protected ChessGrid grid;
     public GameObject currentTile;
     [SerializeField] float groundCheckDistance = 8f;
-    List<List<GameObject>> possibleRoutes = new List<List<GameObject>>();
-    
+    protected List<List<GameObject>> possibleRoutes = new List<List<GameObject>>();
+    [SerializeField] List<GameObject> selectedRoute = new List<GameObject>();
+
+    int selectedRouteIndex = 0;
+    bool moving;
 
     // Start is called before the first frame update
     void Start()
@@ -52,25 +52,41 @@ public class ChessPiece : MonoBehaviour
         if (!currentTile)
         {
             GroundCheck();
-            //CreatePossibleRoutes();
         }
+
+        if (moving || possibleRoutes.Count == 0)
+        {
+            Move();
+        }
+    }
+
+    public void SelectPiece()
+    {
+        possibleRoutes.Clear();
+        possibleRoutes = CreatePossibleRoutes();
+    }
+
+    public void SelectRoute(GameObject gameObject)
+    {
+        GameObject tile = grid.GetTile(gameObject);
+
+        for (int i = 0; i < possibleRoutes.Count; i++)
+        {
+            if (tile == possibleRoutes[i][possibleRoutes[i].Count - 1])
+            {
+                selectedRouteIndex = i;
+                break;
+            }
+        }
+        selectedRoute = possibleRoutes[selectedRouteIndex];
+        moving = true;
     }
     public virtual List<List<GameObject>> CreatePossibleRoutes()
     {
         possibleRoutes.Clear();
         return possibleRoutes;
     }
-    public void CreatePath(GameObject selectedTile)
-    {
-        bool hasEnemy = grid.TileHasEnemy(selectedTile);
-        bool canMoveToTile = false;
 
-        switch(type)
-        {
-            case PieceType.Pawn:
-                break;
-        }
-    }
     bool CanMoveToTile(GameObject selectedTile)
     {
         bool hasEnemy = grid.TileHasEnemy(selectedTile);
@@ -118,7 +134,19 @@ public class ChessPiece : MonoBehaviour
     }
     void Move()
     {
-        
+        if (!moving) return;
+
+        Vector3 startPoint = transform.position; //possibleRoutes[selectedRouteIndex][0].transform.GetChild(0).position;
+        Vector3 endPoint = possibleRoutes[selectedRouteIndex][possibleRoutes[selectedRouteIndex].Count - 1].transform.GetChild(0).position;
+        float time = moveTime * possibleRoutes[selectedRouteIndex].Count;
+
+        transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
+        //Debug.Log(Vector3.Distance(transform.position, endPoint));
+        if (Vector3.Distance(transform.position, endPoint) < 0.0001f)
+        {
+            currentTile = null;
+            moving = false;
+        }
     }
 
     void GroundCheck()
@@ -129,13 +157,13 @@ public class ChessPiece : MonoBehaviour
         ray.direction = Vector3.down;
 
         bool hit = Physics.Raycast(ray, out rayHit, groundCheckDistance);
-        Debug.DrawLine(ray.origin, ray.origin + Vector3.down * groundCheckDistance, Color.red);
+        Debug.DrawLine(ray.origin, ray.origin + Vector3.down * groundCheckDistance, Color.red, 0.5f);
 
         if (!hit) return;
-
+        
         currentTile = grid.GetTile(rayHit.collider.gameObject);
 
         if (currentTile == null) return;
-        transform.position = currentTile.transform.position;
+        transform.position = currentTile.transform.position + Vector3.up * 2f;
     }
 }

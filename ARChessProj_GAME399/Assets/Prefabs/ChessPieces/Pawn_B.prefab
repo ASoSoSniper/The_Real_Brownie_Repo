@@ -134,11 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   team: 2
-  maxTileMoves: 1
-  movePath: []
   raisedHeight: 10
   raiseTime: 1
-  moveTime: 0.5
+  moveTime: 10
   currentTile: {fileID: 0}
   groundCheckDistance: 8
 --- !u!114 &-699614251178580064
