@@ -5,11 +5,14 @@ using UnityEngine;
 using Unity.UI;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Android;
+using static UnityEngine.GraphicsBuffer;
 
 public class PieceCasting : MonoBehaviour
 {
     public Button confirmSelectionButton;
     private TMP_Text buttonText;
+    private string initialText;
 
     private Material prevMat;
 
@@ -28,6 +31,7 @@ public class PieceCasting : MonoBehaviour
     private void Start()
     {
         buttonText = confirmSelectionButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        initialText = confirmSelectionButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text;
     }
 
     // Update is called once per frame
@@ -40,6 +44,8 @@ public class PieceCasting : MonoBehaviour
         {
             SelectObject();
         }
+
+        CameraMovement();
     }
 
     GameObject CastingForPieces()
@@ -98,6 +104,8 @@ public class PieceCasting : MonoBehaviour
             }
             selectionMode = SelectionMode.Piece;
         }
+
+        ChangeButtonText();
     }
 
     bool CorrectSelectionMode(GameObject gameObject)
@@ -134,5 +142,29 @@ public class PieceCasting : MonoBehaviour
         }
 
         return piece;
+    }
+
+    public void ChangeButtonText()
+    {
+        if (selectionMode == SelectionMode.Tile)
+        {
+            buttonText.text = "Confirm Move";
+        }
+        else
+        {
+            buttonText.text = initialText;
+        }
+
+    }
+
+    void CameraMovement()
+    {
+        double tiltAroundY = Input.GetAxisRaw("Horizontal") * 90.0;
+        double tiltAroundX = Input.GetAxisRaw("Vertical") * 90.0 * -1.0;
+
+        // Rotate the cube by converting the angles into a quaternion.
+        Quaternion target = Quaternion.Euler((float)tiltAroundX, (float)tiltAroundY, 0);
+
+        gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 2.0f);
     }
 }
