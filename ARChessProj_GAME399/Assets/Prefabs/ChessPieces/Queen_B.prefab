@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 4242117870698697583}
   - component: {fileID: -7617703731987003468}
   - component: {fileID: 7979936523691462451}
+  - component: {fileID: -4224203193770737253}
   m_Layer: 0
   m_Name: Queen_B
   m_TagString: Untagged
@@ -156,6 +157,26 @@ CapsuleCollider:
   m_Height: 4.3110237
   m_Direction: 1
   m_Center: {x: 0, y: 1.2627228, z: 0}
+--- !u!114 &-4224203193770737253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493590853267408375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c60462745f0c848b5fb23072bc4286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 6
+  team: 2
+  raisedHeight: 10
+  raiseTime: 1
+  moveTime: 2
+  currentTile: {fileID: 0}
+  groundCheckDistance: 8
+  selectedRoute: []
 --- !u!1 &5893359956923410363
 GameObject:
   m_ObjectHideFlags: 0

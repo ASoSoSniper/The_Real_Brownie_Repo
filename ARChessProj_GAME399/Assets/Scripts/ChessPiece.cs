@@ -25,9 +25,6 @@ public class ChessPiece : MonoBehaviour
     public PieceType type;
     public Teams team;
 
-    [SerializeField] float raisedHeight = 10f;
-
-    [SerializeField] float raiseTime = 1f;
     [SerializeField] float moveTime = 0.5f;
 
     protected ChessGrid grid;
@@ -38,7 +35,7 @@ public class ChessPiece : MonoBehaviour
 
     int selectedRouteIndex = 0;
     int selectedTileIndex = 0;
-    bool moving;
+    protected bool moving;
 
     // Start is called before the first frame update
     void Start()
