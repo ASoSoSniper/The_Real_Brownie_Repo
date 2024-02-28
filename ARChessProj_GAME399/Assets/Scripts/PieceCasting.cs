@@ -159,12 +159,10 @@ public class PieceCasting : MonoBehaviour
 
     void CameraMovement()
     {
-        double tiltAroundY = Input.GetAxisRaw("Horizontal") * 90.0;
-        double tiltAroundX = Input.GetAxisRaw("Vertical") * 90.0 * -1.0;
+        double tiltAroundY = Input.GetAxisRaw("Horizontal");
+        double tiltAroundX = Input.GetAxisRaw("Vertical");
 
-        // Rotate the cube by converting the angles into a quaternion.
-        Quaternion target = Quaternion.Euler((float)tiltAroundX, (float)tiltAroundY, 0);
-
-        //gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 2.0f);
+        Vector3 rotate = new Vector3((float)tiltAroundX, (float)tiltAroundY * -1, 0);
+        transform.eulerAngles = transform.eulerAngles - rotate;
     }
 }
