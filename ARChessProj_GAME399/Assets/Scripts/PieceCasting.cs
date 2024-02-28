@@ -165,4 +165,13 @@ public class PieceCasting : MonoBehaviour
         Vector3 rotate = new Vector3((float)tiltAroundX, (float)tiltAroundY * -1, 0);
         transform.eulerAngles = transform.eulerAngles - rotate;
     }
+
+    public void Deselect()
+    {
+        if (selectionMode == SelectionMode.Tile)
+        {
+            selectedChessPiece = null;
+            selectionMode = SelectionMode.Piece;
+        }
+    }
 }

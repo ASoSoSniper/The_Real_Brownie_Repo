@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class Piece_Knight : ChessPiece
 {
     [SerializeField] float raiseHeight = 10f;
+    [SerializeField] float raiseTime = 1f;
+    int movePhase = 0;
     public override List<List<GameObject>> CreatePossibleRoutes()
     {
         List<List<GameObject>> allRoutes = new List<List<GameObject>>();
@@ -68,10 +71,45 @@ public class Piece_Knight : ChessPiece
     public override void Move()
     {
         if (!moving) return;
+        switch(movePhase)
+        {
+            case 0:
+                Vector3 raiseStart = transform.position;
+                Vector3 raiseEnd = currentTile.transform.position + Vector3.up * raiseHeight;
+                transform.position = Vector3.Lerp(raiseStart, raiseEnd, raiseTime * Time.deltaTime);
 
-        Vector3 start = transform.position;
-        Vector3 end = currentTile.transform.position;
+                if (Vector3.Distance(transform.position, raiseEnd) < 0.1f)
+                {
+                    movePhase = 1;
+                }
+                break;
+            case 1:
+                Vector3 startPoint = transform.position;
+                Vector3 endPoint = possibleRoutes[selectedRouteIndex][selectedTileIndex].transform.GetChild(0).position + Vector3.up * raiseHeight;
 
-        //transform.position = Vector3.Lerp(start, end, )
+                transform.position = Vector3.Lerp(startPoint, endPoint, moveTime * Time.deltaTime);
+                if (Vector3.Distance(transform.position, endPoint) < 0.1f)
+                {
+                    movePhase = 2;
+                }
+                break;
+            case 2:
+                Vector3 lowerStart = transform.position;
+                Vector3 lowerEnd = possibleRoutes[selectedRouteIndex][selectedTileIndex].transform.GetChild(0).position;
+                transform.position = Vector3.Lerp(lowerStart, lowerEnd, raiseTime * Time.deltaTime);
+
+                if (Vector3.Distance(transform.position, lowerEnd) < 0.1f)
+                {
+                    currentTile = null;
+                    movePhase = 0;
+                    moving = false;
+                }
+                break;
+
+        }
+        
+
+        
+
     }
 }
