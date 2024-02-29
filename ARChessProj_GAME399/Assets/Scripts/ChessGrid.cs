@@ -107,11 +107,15 @@ public class ChessGrid : MonoBehaviour
         return;
     }
 
-    public bool TileHasEnemy(GameObject tile)
+    public bool TileHasEnemy(GameObject tile, ChessPiece movingPiece)
     {
-        bool hit = Physics.Raycast(tile.transform.position, tile.transform.position + Vector3.up * 5f);
+        RaycastHit result;
+        bool hit = Physics.Raycast(tile.transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
 
-        if (hit) return true;
+        if (!hit) return false;
+
+        ChessPiece piece = result.collider.transform.GetComponent<ChessPiece>();
+        if (piece) return piece.team != movingPiece.team;
 
         return false;
     }
@@ -128,5 +132,35 @@ public class ChessGrid : MonoBehaviour
         if (piece) return piece.team;
 
         return ChessPiece.Teams.None;
+    }
+
+    public ChessPiece GetChessPiece(int x, int z, ChessPiece.Teams enemy)
+    {
+        RaycastHit result;
+        bool hit = Physics.Raycast(GetTile(x,z).transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
+
+        if (!hit) return null;
+
+        ChessPiece piece = result.collider.transform.GetComponent<ChessPiece>();
+        if (!piece) return null;
+
+        if (piece.team == enemy) return piece;
+
+        return null;
+    }
+
+    public void ResetBoardHighlighting()
+    {
+        for (int x = 0; x < Mathf.Sqrt(tiles.Length); x++)
+        {
+            for (int z = 0; z < Mathf.Sqrt(tiles.Length); z++)
+            {
+                GameObject tile = GetTile(x, z);
+                if (tile)
+                {
+                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(false);
+                }
+            }
+        }
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Piece_Pawn : ChessPiece
 {
+    int moveCount = 0;
+    [SerializeField] bool firstMove = false;
     public override List<List<GameObject>> CreatePossibleRoutes()
     {
         Teams enemy = team == Teams.Black ? Teams.White : Teams.Black;
-        
+
         List<List<GameObject>> allRoutes = new List<List<GameObject>>();
 
         List<GameObject> route1 = new List<GameObject>();
@@ -23,39 +25,87 @@ public class Piece_Pawn : ChessPiece
         route2.Add(currentTile);
         route3.Add(currentTile);
 
-        z += dir;
-        if (grid.TileExists(x, z))
+        //Forward
+        GameObject forward1 = CreateStep(x, z + dir, Teams.None);
+        if (forward1) route1.Add(forward1);
+
+        //Second Forward (if first move)
+        if (!firstMove)
         {
-            route1.Add(grid.GetTile(x, z));
-            allRoutes.Add(route1);
+            GameObject forward2 = CreateStep(x, z + dir * 2, Teams.None);
+            if (forward2) route1.Add(forward2);
         }
 
-        x += 1;
-        if (grid.TileExists(x, z) && grid.GetPieceOnTile(grid.GetTile(x, z)) == enemy)
-        {
-            route2.Add(grid.GetTile(x, z));
-            allRoutes.Add(route2);
-        }
-        x -= 2;
-        if (grid.TileExists(x, z) && grid.GetPieceOnTile(grid.GetTile(x, z)) == enemy)
-        {
-            route3.Add(grid.GetTile(x, z));
-            allRoutes.Add(route3);
-        }
+        //Forward Left
+        GameObject forwardLeft = CreateStep(x - 1, z + dir, enemy);
+        Piece_Pawn enPassantLeft = GetEnemyPawn(x - 1, z, enemy);
+        if (forwardLeft || enPassantLeft) route2.Add(grid.GetTile(x - 1, z + dir));
 
-        foreach (GameObject tile in route1)
+        //Forward Right
+        GameObject forwardRight = CreateStep(x + 1, z + dir, enemy);
+        Piece_Pawn enPassantRight = GetEnemyPawn(x + 1, z, enemy);
+        if (forwardRight || enPassantRight) route3.Add(grid.GetTile(x + 1, z + dir));
+
+        allRoutes.Add(route1);
+        allRoutes.Add(route2);
+        allRoutes.Add(route3);
+
+        foreach (List<GameObject> route in allRoutes)
         {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route2)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route3)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
+            foreach (GameObject tile in route)
+            {
+                if (tile != currentTile)
+                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
+            }
         }
 
         return allRoutes;
+    }
+
+    GameObject CreateStep(int x, int z, Teams teamCheck)
+    {
+        if (grid.TileExists(x, z))
+        {
+            GameObject tile = grid.GetTile(x, z);
+            if (grid.GetPieceOnTile(tile) == teamCheck)
+            {
+                return tile;
+            }
+        }
+
+        return null;
+    }
+
+    Piece_Pawn GetEnemyPawn(int x, int z, Teams enemy)
+    {
+        RaycastHit result;
+        bool hit = Physics.Raycast(grid.GetTile(x, z).transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
+
+        if (!hit) return null;
+        
+        Piece_Pawn piece = result.collider.transform.GetComponent<Piece_Pawn>();
+        if (!piece) return null;
+
+        if (piece.team == enemy && piece.moveCount == 2) return piece;
+
+        return null;
+    }
+
+    public override bool Move()
+    {
+        if (!base.Move()) return false;
+
+        if (!firstMove) firstMove = true;
+
+        return true;
+    }
+
+    public override bool SelectRoute(GameObject gameObject)
+    {
+        if (!base.SelectRoute(gameObject)) return false;
+
+        moveCount = selectedTileIndex;
+
+        return true;
     }
 }

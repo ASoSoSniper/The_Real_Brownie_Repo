@@ -257,37 +257,13 @@ public class Piece_Queen : ChessPiece
         }
         allRoutes.Add(route8);
 
-        foreach (GameObject tile in route1)
+        foreach (List<GameObject> route in allRoutes)
         {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route2)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route3)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route4)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route5)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route6)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route7)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route8)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
+            foreach (GameObject tile in route)
+            {
+                if (tile != currentTile)
+                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
+            }
         }
 
         return allRoutes;

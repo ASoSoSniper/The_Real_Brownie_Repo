@@ -44,6 +44,15 @@ public class Piece_Knight : ChessPiece
         List<GameObject> route8 = CreateRoute(x - 1, z - 2);
         if (route8.Count > 0) allRoutes.Add(route8);
 
+        foreach (List<GameObject> route in allRoutes)
+        {
+            foreach (GameObject tile in route)
+            {
+                if (tile != currentTile)
+                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
+            }
+        }
+
         return allRoutes;
     }
 
@@ -68,9 +77,9 @@ public class Piece_Knight : ChessPiece
         return route;
     }
 
-    public override void Move()
+    public override bool Move()
     {
-        if (!moving) return;
+        if (!moving) return false;
         switch(movePhase)
         {
             case 0:
@@ -107,9 +116,7 @@ public class Piece_Knight : ChessPiece
                 break;
 
         }
-        
 
-        
-
+        return true;
     }
 }

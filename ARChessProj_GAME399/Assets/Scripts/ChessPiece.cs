@@ -31,11 +31,15 @@ public class ChessPiece : MonoBehaviour
     public GameObject currentTile;
     [SerializeField] float groundCheckDistance = 8f;
     protected List<List<GameObject>> possibleRoutes = new List<List<GameObject>>();
+    //protected Dictionary<List<GameObject>, ChessPiece> possibleRoutes = new Dictionary<List<GameObject>, ChessPiece>();
+    protected ChessPiece targetPiece;
+
     [SerializeField] List<GameObject> selectedRoute = new List<GameObject>();
 
     protected int selectedRouteIndex = 0;
     protected int selectedTileIndex = 0;
     protected bool moving;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -61,10 +65,11 @@ public class ChessPiece : MonoBehaviour
     public void SelectPiece()
     {
         possibleRoutes.Clear();
+
         possibleRoutes = CreatePossibleRoutes();
     }
 
-    public void SelectRoute(GameObject gameObject)
+    public virtual bool SelectRoute(GameObject gameObject)
     {
         GameObject tile = grid.GetTile(gameObject);
         bool validDestination = false;
@@ -75,6 +80,8 @@ public class ChessPiece : MonoBehaviour
             {
                 if (tile == possibleRoutes[i][j].transform.GetChild(0).gameObject)
                 {
+                    if (tile == currentTile) return false;
+
                     selectedRouteIndex = i;
                     selectedTileIndex = j;
                     validDestination = true;
@@ -87,7 +94,10 @@ public class ChessPiece : MonoBehaviour
         {
             selectedRoute = possibleRoutes[selectedRouteIndex];
             moving = true;
+            return true;
         }
+
+        return false;
     }
     public virtual List<List<GameObject>> CreatePossibleRoutes()
     {
@@ -95,9 +105,9 @@ public class ChessPiece : MonoBehaviour
         return possibleRoutes;
     }
 
-    public virtual void Move()
+    public virtual bool Move()
     {
-        if (!moving) return;
+        if (!moving) return false;
 
         Vector3 startPoint = transform.position;
         Vector3 endPoint = possibleRoutes[selectedRouteIndex][selectedTileIndex].transform.GetChild(0).position;
@@ -110,6 +120,8 @@ public class ChessPiece : MonoBehaviour
             currentTile = null;
             moving = false;
         }
+
+        return true;
     }
 
     void GroundCheck()

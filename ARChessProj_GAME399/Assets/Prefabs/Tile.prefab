@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4559841670506385704}
   - component: {fileID: 8644375773170701686}
   m_Layer: 0
-  m_Name: NewTile
+  m_Name: TileMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,6 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightedMaterial: {fileID: 2100000, guid: ed3df56c2384bc14abe7cc2ca61b97ac, type: 2}
+  pathMaterial: {fileID: 2100000, guid: bda6dd08832aab64ab2aaf057e29d683, type: 2}
+  violenceMaterial: {fileID: 2100000, guid: 3680fc892348d0044bbf140ce44c7ba4, type: 2}
 --- !u!1 &6424442379339964715
 GameObject:
   m_ObjectHideFlags: 0

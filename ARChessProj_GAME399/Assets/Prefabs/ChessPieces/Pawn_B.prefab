@@ -92,9 +92,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4242117870698697583}
-  - component: {fileID: 868292722081487170}
   - component: {fileID: -699614251178580064}
   - component: {fileID: -8730083942276380812}
+  - component: {fileID: 868292722081487170}
   m_Layer: 0
   m_Name: Pawn_B
   m_TagString: Untagged
@@ -120,25 +120,6 @@ Transform:
   - {fileID: 4399593934586184356}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &868292722081487170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5493590853267408375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 346b65bce3b2aa14aa55b23080734aa5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
-  team: 2
-  raisedHeight: 10
-  raiseTime: 1
-  moveTime: 10
-  currentTile: {fileID: 0}
-  groundCheckDistance: 8
 --- !u!114 &-699614251178580064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,6 +156,24 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 1.2627228, z: 0}
+--- !u!114 &868292722081487170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493590853267408375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 346b65bce3b2aa14aa55b23080734aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  team: 2
+  moveTime: 10
+  currentTile: {fileID: 0}
+  groundCheckDistance: 8
+  selectedRoute: []
 --- !u!1 &5893359956923410363
 GameObject:
   m_ObjectHideFlags: 0

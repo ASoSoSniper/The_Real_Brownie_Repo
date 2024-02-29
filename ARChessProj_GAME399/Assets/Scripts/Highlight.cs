@@ -6,7 +6,10 @@ public class Highlight : MonoBehaviour
 {
     MeshRenderer renderer;
     Material defaultMaterial;
+    Material currentDefault;
     [SerializeField] Material highlightedMaterial;
+    [SerializeField] Material pathMaterial;
+    [SerializeField] Material violenceMaterial;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +17,7 @@ public class Highlight : MonoBehaviour
         if (!renderer) renderer = GetComponentInChildren<MeshRenderer>();
 
         defaultMaterial = renderer.material;
+        currentDefault = defaultMaterial;
     }
 
     public bool SetHighlighted(bool highlighted)
@@ -24,7 +28,25 @@ public class Highlight : MonoBehaviour
             return true;
         }
 
-        renderer.material = defaultMaterial;
+        renderer.material = currentDefault;
         return false;
+    }
+
+    public bool SetAsRouteTile(bool set, bool tileHasEnemy = false)
+    {
+        if (!pathMaterial || !violenceMaterial) return false;
+
+        if (set)
+        {
+            currentDefault = tileHasEnemy ? violenceMaterial : pathMaterial;
+        }
+        else
+        {
+            currentDefault = defaultMaterial;
+        }
+
+        renderer.material = currentDefault;
+
+        return set;
     }
 }

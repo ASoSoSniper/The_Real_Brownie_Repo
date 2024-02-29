@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 4242117870698697583}
   - component: {fileID: -2597841707866721532}
   - component: {fileID: -5697020461707822135}
+  - component: {fileID: 8355769152635184990}
   m_Layer: 0
   m_Name: Knight(Horses)
   m_TagString: Untagged
@@ -133,6 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightedMaterial: {fileID: 2100000, guid: ed3df56c2384bc14abe7cc2ca61b97ac, type: 2}
+  pathMaterial: {fileID: 0}
+  violenceMaterial: {fileID: 0}
 --- !u!136 &-5697020461707822135
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -156,6 +159,26 @@ CapsuleCollider:
   m_Height: 3.5
   m_Direction: 1
   m_Center: {x: 0, y: 1.2627228, z: 0}
+--- !u!114 &8355769152635184990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493590853267408375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c994268dd98946448b1b39e7e53dfdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2
+  team: 1
+  moveTime: 10
+  currentTile: {fileID: 0}
+  groundCheckDistance: 8
+  selectedRoute: []
+  raiseHeight: 10
+  raiseTime: 10
 --- !u!1 &5893359956923410363
 GameObject:
   m_ObjectHideFlags: 0

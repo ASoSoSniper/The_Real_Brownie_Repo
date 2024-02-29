@@ -427,9 +427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   team: 2
-  raisedHeight: 10
-  raiseTime: 1
-  moveTime: 2
+  moveTime: 10
   currentTile: {fileID: 0}
   groundCheckDistance: 8
   selectedRoute: []

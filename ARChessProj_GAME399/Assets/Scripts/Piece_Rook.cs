@@ -124,23 +124,15 @@ public class Piece_Rook : ChessPiece
         }
         allRoutes.Add(route4);
 
-        foreach (GameObject tile in route1)
+        foreach (List<GameObject> route in allRoutes)
         {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
+            foreach (GameObject tile in route)
+            {
+                if (tile != currentTile)
+                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
+            }
         }
-        foreach (GameObject tile in route2)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route3)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-        foreach (GameObject tile in route4)
-        {
-            tile.GetComponentInChildren<Highlight>().SetHighlighted(true);
-        }
-
+        
         return allRoutes;
     }
 }
