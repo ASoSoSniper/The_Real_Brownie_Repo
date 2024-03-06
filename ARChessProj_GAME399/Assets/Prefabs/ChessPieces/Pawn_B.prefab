@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightedMaterial: {fileID: 2100000, guid: ed3df56c2384bc14abe7cc2ca61b97ac, type: 2}
-  pathMaterial: {fileID: 0}
-  violenceMaterial: {fileID: 0}
+  pathMaterial: {fileID: 2100000, guid: bda6dd08832aab64ab2aaf057e29d683, type: 2}
+  violenceMaterial: {fileID: 2100000, guid: 3680fc892348d0044bbf140ce44c7ba4, type: 2}
 --- !u!136 &-8730083942276380812
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -153,7 +153,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 613ba297100b1454c899a6f4235a3203, type: 2}
+  - {fileID: 2100000, guid: 6940d7a2caee13c4e805bedb9bddc0a5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

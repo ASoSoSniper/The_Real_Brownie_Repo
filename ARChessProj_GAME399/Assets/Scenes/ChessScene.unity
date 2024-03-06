@@ -3487,8 +3487,8 @@ MonoBehaviour:
   boardSize: 8
   prefab: {fileID: 6424442379339964715, guid: 7f30e3c7e9827b6418733bb0f28f40b8, type: 3}
   spawnPoint: {fileID: 1300837349}
-  whiteMaterial: {fileID: 2100000, guid: 0b2c32d1afa59b449801ea5dcd8c1c5f, type: 2}
-  blackMaterial: {fileID: 2100000, guid: 613ba297100b1454c899a6f4235a3203, type: 2}
+  whiteMaterial: {fileID: 2100000, guid: a7516f11d330afd4692441926470d87b, type: 2}
+  blackMaterial: {fileID: 2100000, guid: dc736a61c74e0314fb89844dd39c0f9a, type: 2}
   tileSpacing: 9
 --- !u!1001 &1315168430
 PrefabInstance:
