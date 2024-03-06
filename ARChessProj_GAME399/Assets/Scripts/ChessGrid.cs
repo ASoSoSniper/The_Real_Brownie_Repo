@@ -136,6 +136,7 @@ public class ChessGrid : MonoBehaviour
 
     public ChessPiece GetChessPiece(int x, int z, ChessPiece.Teams teamToCheck)
     {
+        if (!TileExists(x, z)) return null;
         RaycastHit result;
         bool hit = Physics.Raycast(GetTile(x,z).transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
 

@@ -92,6 +92,8 @@ public class PieceCasting : MonoBehaviour
             objectHovered.GetComponent<Highlight>().SetHighlighted(false);
         }
 
+        if (!gameObject) return;
+
         gameObject.GetComponent<Highlight>().SetHighlighted(true);
         objectHovered = gameObject;
     }

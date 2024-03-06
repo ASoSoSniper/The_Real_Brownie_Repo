@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.3708985, g: 0.3783704, b: 0.35722548, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -253,7 +253,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4242117870698697583, guid: 07f7faf633b04d247a3d346a87dad84f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.3
+      value: 8.6
       objectReference: {fileID: 0}
     - target: {fileID: 4242117870698697583, guid: 07f7faf633b04d247a3d346a87dad84f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -294,6 +294,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: 07f7faf633b04d247a3d346a87dad84f, type: 3}
       propertyPath: m_Name
       value: Queen_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: 07f7faf633b04d247a3d346a87dad84f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -356,6 +360,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
       propertyPath: m_Name
       value: Bishop (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -650,6 +658,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
       propertyPath: m_Name
       value: Knight(Horses) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1306,6 +1318,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bishop_B (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: dc57502905d24f84dbf4b6d52941e9f4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1682,6 +1698,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
       propertyPath: m_Name
       value: Bishop
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2212,6 +2232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knight(Horses)_B
       objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: cc3132d53b8e69f488129e15110095d3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2665,6 +2689,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rook_B
       objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: fa1a7a0dfae360a4686923794dfac766, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2751,7 +2779,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4242117870698697583, guid: 0c1016bdd2d06b2478168fe8423e59ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.2
+      value: -1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4242117870698697583, guid: 0c1016bdd2d06b2478168fe8423e59ad, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2792,6 +2820,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: 0c1016bdd2d06b2478168fe8423e59ad, type: 3}
       propertyPath: m_Name
       value: King_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: 0c1016bdd2d06b2478168fe8423e59ad, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3244,6 +3276,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bishop_B
       objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: dc57502905d24f84dbf4b6d52941e9f4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3305,6 +3341,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
       propertyPath: m_Name
       value: Knight(Horses)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3611,6 +3651,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: 87a46d9f6e76d31478d55f95a84ccad3, type: 3}
       propertyPath: m_Name
       value: Pawn_B (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: 87a46d9f6e76d31478d55f95a84ccad3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4104,6 +4148,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Queen
       objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: d21d825a0a92f38449525725f2c99f2b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4227,6 +4275,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: cc3132d53b8e69f488129e15110095d3, type: 3}
       propertyPath: m_Name
       value: Knight(Horses)_B (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: cc3132d53b8e69f488129e15110095d3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4477,6 +4529,10 @@ PrefabInstance:
     - target: {fileID: 5493590853267408375, guid: fa1a7a0dfae360a4686923794dfac766, type: 3}
       propertyPath: m_Name
       value: Rook_B (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5493590853267408375, guid: fa1a7a0dfae360a4686923794dfac766, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

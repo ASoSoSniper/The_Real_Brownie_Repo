@@ -41,6 +41,8 @@ public class ChessPiece : MonoBehaviour
 
     protected Teams ally;
     protected Teams enemy;
+
+    [HideInInspector] public bool firstMove = false;
     
 
     // Start is called before the first frame update
@@ -71,6 +73,15 @@ public class ChessPiece : MonoBehaviour
         possibleRoutes.Clear();
 
         possibleRoutes = CreatePossibleRoutes();
+
+        foreach (List<GameObject> route in possibleRoutes.Keys)
+        {
+            foreach (GameObject tile in route)
+            {
+                if (tile != currentTile)
+                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
+            }
+        }
     }
 
     public virtual bool SelectRoute(GameObject gameObject)
@@ -108,6 +119,7 @@ public class ChessPiece : MonoBehaviour
         if (validDestination)
         {
             moving = true;
+            CastlingCheck();
             return true;
         }
 
@@ -115,7 +127,6 @@ public class ChessPiece : MonoBehaviour
     }
     public virtual Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
-        possibleRoutes.Clear();
         return possibleRoutes;
     }
 
@@ -123,13 +134,15 @@ public class ChessPiece : MonoBehaviour
     {
         if (!moving) return false;
 
+        if (!firstMove) firstMove = true;
+
         Vector3 startPoint = transform.position;
         Vector3 endPoint = selectedRoute[selectedTileIndex].transform.GetChild(0).position;
 
         float time = moveTime / selectedTileIndex;
 
         transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
-        if (Vector3.Distance(transform.position, endPoint) < 0.0001f)
+        if (Vector3.Distance(transform.position, endPoint) < 0.01f)
         {
             currentTile = null;
             moving = false;
@@ -221,5 +234,32 @@ public class ChessPiece : MonoBehaviour
 
         foundEnemy = enemyPiece;
         return route;
+    }
+
+    bool CastlingCheck()
+    {
+        if (type != PieceType.King || firstMove) return false;
+
+        Piece_King king = GetComponent<Piece_King>();
+        if (!king) return false;
+
+        if (selectedRoute == king.rightCastling)
+        {
+            king.savedRightRook.selectedRoute = king.rightCastling;
+            king.savedRightRook.selectedTileIndex = 1;
+
+            moving = true;
+            return true;
+        }
+        else if (selectedRoute == king.leftCastling)
+        {
+            king.savedLeftRook.selectedRoute = king.leftCastling;
+            king.savedLeftRook.selectedTileIndex = 1;
+
+            moving = true;
+            return true;
+        }
+        
+        return false;
     }
 }

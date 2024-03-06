@@ -52,15 +52,6 @@ public class Piece_Knight : ChessPiece
         List<GameObject> route8 = CreateRoute2Point(x - 1, z - 2, out route8TargetPiece);
         if (route8.Count > 0) allRoutes.Add(route8, route8TargetPiece);
 
-        foreach (List<GameObject> route in allRoutes.Keys)
-        {
-            foreach (GameObject tile in route)
-            {
-                if (tile != currentTile)
-                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
-            }
-        }
-
         return allRoutes;
     }
 

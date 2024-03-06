@@ -32,15 +32,6 @@ public class Piece_Bishop : ChessPiece
         List<GameObject> route4 = CreateRouteInDirection(new Vector2(x, z), new Vector2(1, -1), out route4TargetPiece);
         allRoutes.Add(route4, route4TargetPiece);
 
-        foreach (List<GameObject> route in allRoutes.Keys)
-        {
-            foreach (GameObject tile in route)
-            {
-                if (tile != currentTile)
-                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
-            }
-        }
-
         return allRoutes;
     }
 

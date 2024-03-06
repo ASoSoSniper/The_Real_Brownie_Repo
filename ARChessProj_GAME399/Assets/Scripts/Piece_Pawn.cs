@@ -5,7 +5,6 @@ using UnityEngine;
 public class Piece_Pawn : ChessPiece
 {
     int moveCount = 0;
-    [SerializeField] bool firstMove = false;
     public override Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
         Dictionary<List<GameObject>, ChessPiece> allRoutes = new Dictionary<List<GameObject>, ChessPiece>();
@@ -52,15 +51,6 @@ public class Piece_Pawn : ChessPiece
         allRoutes.Add(route2, enPassantLeft ? enPassantLeft : forwardLeftTarget);
         allRoutes.Add(route3, enPassantRight ? enPassantRight : forwardRightTarget);
 
-        foreach (List<GameObject> route in allRoutes.Keys)
-        {
-            foreach (GameObject tile in route)
-            {
-                if (tile != currentTile)
-                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
-            }
-        }
-
         return allRoutes;
     }
 
@@ -80,6 +70,7 @@ public class Piece_Pawn : ChessPiece
 
     Piece_Pawn GetEnemyPawn(int x, int z, Teams enemy)
     {
+        if (!grid.TileExists(x, z)) return null;
         RaycastHit result;
         bool hit = Physics.Raycast(grid.GetTile(x, z).transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
 
@@ -91,15 +82,6 @@ public class Piece_Pawn : ChessPiece
         if (piece.team == enemy && piece.moveCount == 2) return piece;
 
         return null;
-    }
-
-    public override bool Move()
-    {
-        if (!base.Move()) return false;
-
-        if (!firstMove) firstMove = true;
-
-        return true;
     }
 
     public override bool SelectRoute(GameObject gameObject)

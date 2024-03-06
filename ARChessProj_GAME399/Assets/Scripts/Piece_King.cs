@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class Piece_King : ChessPiece
 {
+    [HideInInspector] public Piece_Rook savedLeftRook;
+    [HideInInspector] public Piece_Rook savedRightRook;
+    [HideInInspector] public List<GameObject> leftCastling;
+    [HideInInspector] public List<GameObject> rightCastling;
+
     public override Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
+        savedLeftRook = null;
+        savedRightRook = null;
+        leftCastling = null;
+        rightCastling = null;
+
         Dictionary<List<GameObject>, ChessPiece> allRoutes = new Dictionary<List<GameObject>, ChessPiece>();
 
         int x = 0;
@@ -52,15 +62,148 @@ public class Piece_King : ChessPiece
         List<GameObject> route8 = CreateRoute2Point(x - 1, z - 1, out route8TargetPiece);
         if (route8.Count > 0) allRoutes.Add(route8, route8TargetPiece);
 
-        foreach (List<GameObject> route in allRoutes.Keys)
+        //Castling
+        if (!firstMove)
         {
-            foreach (GameObject tile in route)
+            //Left
+            Piece_Rook leftRook = GetRookForCastling(x - 4, z);
+            bool leftRookSpotClear = grid.GetPieceOnTile(grid.GetTile(x - 1, z)) == Teams.None;
+
+            List<GameObject> leftRoute = new List<GameObject>();
+            bool leftClear = ClearPathForCastling(new Vector2(x, z), new Vector2(x - 2, z), out leftRoute);
+
+            if (leftRook && leftRookSpotClear && leftClear)
             {
-                if (tile != currentTile)
-                    tile.GetComponentInChildren<Highlight>().SetAsRouteTile(true, grid.TileHasEnemy(tile, this));
+                allRoutes.Add(leftRoute, null);
+                savedLeftRook = leftRook;
+                leftCastling = leftRoute;
+            }
+
+            //Right
+            Piece_Rook rightRook = GetRookForCastling(x + 3, z);
+            bool rightRookSpotClear = grid.GetPieceOnTile(grid.GetTile(x + 1, z)) == Teams.None;
+
+            List<GameObject> rightRoute = new List<GameObject>();
+            bool rightClear = ClearPathForCastling(new Vector2(x, z), new Vector2(x + 2, z), out rightRoute);
+
+            if (rightRook && rightRookSpotClear && rightClear)
+            {
+                allRoutes.Add(rightRoute, null);
+                savedRightRook = rightRook;
+                rightCastling = rightRoute;
             }
         }
 
         return allRoutes;
+    }
+
+    Piece_Rook GetRookForCastling(int x, int z)
+    {
+        if (!grid.TileExists(x, z)) return null;
+
+        RaycastHit result;
+        bool hit = Physics.Raycast(grid.GetTile(x, z).transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
+
+        if (!hit) return null;
+
+        Piece_Rook piece = result.collider.transform.GetComponent<Piece_Rook>();
+        if (!piece) return null;
+
+        if (piece.team == ally && !piece.firstMove) return piece;
+
+        return null;
+    }
+
+    bool ClearPathForCastling(Vector2 initTile, Vector2 targetTile, out List<GameObject> route)
+    {
+        if (InCheck())
+        {
+            route = null;
+            return false;
+        }
+
+        int step = targetTile.x > initTile.x ? 1 : -1;
+
+        List<GameObject> newRoute = new List<GameObject>();
+
+        newRoute.Add(currentTile);
+
+        int x = (int)initTile.x;
+        int z = (int)initTile.y;
+        bool endPath = false;
+
+        while (!endPath)
+        {
+            x += step;
+            if (grid.TileExists(x, z))
+            {
+                GameObject tile = grid.GetTile(x, z);
+                Teams occupation = grid.GetPieceOnTile(tile);
+                if (occupation != Teams.None || TileUnderAttack(x, z))
+                {
+                    route = null;
+                    return false;
+                }
+
+                newRoute.Add(tile);
+            }
+            else
+            {
+                route = null;
+                return false;
+            }
+
+            if (x == targetTile.x) endPath = true;
+            
+        }
+
+        route = newRoute;
+        return true;
+    }
+
+    bool TileUnderAttack(int x, int z)
+    {
+        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
+        GameObject tileToCheck = grid.GetTile(x, z);
+
+        for (int i = 0; i < allPieces.Length; i++)
+        {
+            if (allPieces[i].team != enemy || allPieces[i] == this ||
+                (allPieces[i].type == PieceType.King && !allPieces[i].firstMove)) continue;
+
+            Dictionary<List<GameObject>, ChessPiece> routes = allPieces[i].CreatePossibleRoutes();
+            foreach (List<GameObject> route in routes.Keys) 
+            {
+                foreach (GameObject tile in route)
+                {
+                    if (tile == tileToCheck)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool InCheck()
+    {
+        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
+
+        for (int i = 0; i < allPieces.Length; i++)
+        {
+            if (allPieces[i].team != enemy || allPieces[i] == this ||
+                (allPieces[i].type == PieceType.King && !allPieces[i].firstMove)) continue;
+
+            Dictionary<List<GameObject>, ChessPiece> routes = allPieces[i].CreatePossibleRoutes();
+            foreach (ChessPiece piece in routes.Values)
+            {
+                if (piece == this)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
