@@ -134,7 +134,7 @@ public class ChessGrid : MonoBehaviour
         return ChessPiece.Teams.None;
     }
 
-    public ChessPiece GetChessPiece(int x, int z, ChessPiece.Teams enemy)
+    public ChessPiece GetChessPiece(int x, int z, ChessPiece.Teams teamToCheck)
     {
         RaycastHit result;
         bool hit = Physics.Raycast(GetTile(x,z).transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
@@ -144,7 +144,21 @@ public class ChessGrid : MonoBehaviour
         ChessPiece piece = result.collider.transform.GetComponent<ChessPiece>();
         if (!piece) return null;
 
-        if (piece.team == enemy) return piece;
+        if (piece.team == teamToCheck) return piece;
+
+        return null;
+    }
+    public ChessPiece GetChessPiece(GameObject tile, ChessPiece.Teams teamToCheck)
+    {
+        RaycastHit result;
+        bool hit = Physics.Raycast(tile.transform.GetChild(0).transform.position + Vector3.down * 5f, Vector3.up, out result, 10f);
+
+        if (!hit) return null;
+
+        ChessPiece piece = result.collider.transform.GetComponent<ChessPiece>();
+        if (!piece) return null;
+
+        if (piece.team == teamToCheck) return piece;
 
         return null;
     }

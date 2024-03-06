@@ -6,11 +6,9 @@ public class Piece_Pawn : ChessPiece
 {
     int moveCount = 0;
     [SerializeField] bool firstMove = false;
-    public override List<List<GameObject>> CreatePossibleRoutes()
+    public override Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
-        Teams enemy = team == Teams.Black ? Teams.White : Teams.Black;
-
-        List<List<GameObject>> allRoutes = new List<List<GameObject>>();
+        Dictionary<List<GameObject>, ChessPiece> allRoutes = new Dictionary<List<GameObject>, ChessPiece>();
 
         List<GameObject> route1 = new List<GameObject>();
         List<GameObject> route2 = new List<GameObject>();
@@ -38,19 +36,23 @@ public class Piece_Pawn : ChessPiece
 
         //Forward Left
         GameObject forwardLeft = CreateStep(x - 1, z + dir, enemy);
+
+        ChessPiece forwardLeftTarget = grid.GetChessPiece(x - 1, z + dir, enemy);
         Piece_Pawn enPassantLeft = GetEnemyPawn(x - 1, z, enemy);
         if (forwardLeft || enPassantLeft) route2.Add(grid.GetTile(x - 1, z + dir));
 
         //Forward Right
         GameObject forwardRight = CreateStep(x + 1, z + dir, enemy);
+
+        ChessPiece forwardRightTarget = grid.GetChessPiece(x + 1, z + dir, enemy);
         Piece_Pawn enPassantRight = GetEnemyPawn(x + 1, z, enemy);
         if (forwardRight || enPassantRight) route3.Add(grid.GetTile(x + 1, z + dir));
 
-        allRoutes.Add(route1);
-        allRoutes.Add(route2);
-        allRoutes.Add(route3);
+        allRoutes.Add(route1, null);
+        allRoutes.Add(route2, enPassantLeft ? enPassantLeft : forwardLeftTarget);
+        allRoutes.Add(route3, enPassantRight ? enPassantRight : forwardRightTarget);
 
-        foreach (List<GameObject> route in allRoutes)
+        foreach (List<GameObject> route in allRoutes.Keys)
         {
             foreach (GameObject tile in route)
             {

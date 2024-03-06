@@ -4,260 +4,55 @@ using UnityEngine;
 
 public class Piece_Queen : ChessPiece
 {
-    public override List<List<GameObject>> CreatePossibleRoutes()
+    public override Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
-        Teams enemy = team == Teams.Black ? Teams.White : Teams.Black;
-        Teams ally = team == Teams.Black ? Teams.Black : Teams.White;
-
-        List<List<GameObject>> allRoutes = new List<List<GameObject>>();
-
-        List<GameObject> route1 = new List<GameObject>();
-        List<GameObject> route2 = new List<GameObject>();
-        List<GameObject> route3 = new List<GameObject>();
-        List<GameObject> route4 = new List<GameObject>();
-        List<GameObject> route5 = new List<GameObject>();
-        List<GameObject> route6 = new List<GameObject>();
-        List<GameObject> route7 = new List<GameObject>();
-        List<GameObject> route8 = new List<GameObject>();
-
-        route1.Add(currentTile);
-        route2.Add(currentTile);
-        route3.Add(currentTile);
-        route4.Add(currentTile);
-        route5.Add(currentTile);
-        route6.Add(currentTile);
-        route7.Add(currentTile);
-        route8.Add(currentTile);
+        Dictionary<List<GameObject>, ChessPiece> allRoutes = new Dictionary<List<GameObject>, ChessPiece>();
 
         int x = 0;
         int z = 0;
         grid.GetTileCoordinates(currentTile, out x, out z);
 
         //Forward
-        int forZ = z;
-        bool forEnd = false;
-
-        while (!forEnd)
-        {
-            ++forZ;
-            if (grid.TileExists(x, forZ))
-            {
-                GameObject tile = grid.GetTile(x, forZ);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    forEnd = true;
-                }
-                route1.Add(tile);
-            }
-            else
-            {
-                forEnd = true;
-            }
-        }
-        allRoutes.Add(route1);
+        ChessPiece route1TargetPiece = null;
+        List<GameObject> route1 = CreateRouteInDirection(new Vector2(x, z), new Vector2(0, 1), out route1TargetPiece);
+        allRoutes.Add(route1, route1TargetPiece);
 
         //Back
-        int backZ = z;
-        bool backEnd = false;
-
-        while (!backEnd)
-        {
-            --backZ;
-            if (grid.TileExists(x, backZ))
-            {
-                GameObject tile = grid.GetTile(x, backZ);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    backEnd = true;
-                }
-                route2.Add(tile);
-            }
-            else
-            {
-                backEnd = true;
-            }
-        }
-        allRoutes.Add(route2);
+        ChessPiece route2TargetPiece = null;
+        List<GameObject> route2 = CreateRouteInDirection(new Vector2(x, z), new Vector2(0, -1), out route2TargetPiece);
+        allRoutes.Add(route2, route2TargetPiece);
 
         //Left
-        int leftX = x;
-        bool leftEnd = false;
-
-        while (!leftEnd)
-        {
-            --leftX;
-            if (grid.TileExists(leftX, z))
-            {
-                GameObject tile = grid.GetTile(leftX, z);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    leftEnd = true;
-                }
-                route3.Add(tile);
-            }
-            else
-            {
-                leftEnd = true;
-            }
-        }
-        allRoutes.Add(route3);
+        ChessPiece route3TargetPiece = null;
+        List<GameObject> route3 = CreateRouteInDirection(new Vector2(x, z), new Vector2(-1, 0), out route3TargetPiece);
+        allRoutes.Add(route3, route3TargetPiece);
 
         //Right
-        int rightX = x;
-        bool rightEnd = false;
-
-        while (!rightEnd) 
-        {
-            ++rightX;
-            if (grid.TileExists(rightX, z))
-            {
-                GameObject tile = grid.GetTile(rightX, z);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    rightEnd = true;
-                }
-                route4.Add(tile);
-            }
-            else
-            {
-                rightEnd = true;
-            }
-        }
-        allRoutes.Add(route4);
+        ChessPiece route4TargetPiece = null;
+        List<GameObject> route4 = CreateRouteInDirection(new Vector2(x, z), new Vector2(1, 0), out route4TargetPiece);
+        allRoutes.Add(route4, route4TargetPiece);
 
         //Forward + Right
-        int forRightX = x;
-        int forRightZ = z;
-        bool forRightEnd = false;
-
-        while (!forRightEnd)
-        {
-            ++forRightX;
-            ++forRightZ;
-            if (grid.TileExists(forRightX, forRightZ))
-            {
-                GameObject tile = grid.GetTile(forRightX, forRightZ);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    forRightEnd = true;
-                }
-                route5.Add(tile);
-            }
-            else
-            {
-                forRightEnd = true;
-            }
-        }
-        allRoutes.Add(route5);
+        ChessPiece route5TargetPiece = null;
+        List<GameObject> route5 = CreateRouteInDirection(new Vector2(x, z), new Vector2(1, 1), out route5TargetPiece);
+        allRoutes.Add(route5, route5TargetPiece);
 
         //Forward + Left
-        int forLeftX = x;
-        int forLeftZ = z;
-        bool forLeftEnd = false;
-
-        while (!forLeftEnd)
-        {
-            --forLeftX;
-            ++forLeftZ;
-            if (grid.TileExists(forLeftX, forLeftZ))
-            {
-                GameObject tile = grid.GetTile(forLeftX, forLeftZ);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    forLeftEnd = true;
-                }
-                route6.Add(tile);
-            }
-            else
-            {
-                forLeftEnd = true;
-            }
-        }
-        allRoutes.Add(route6);
+        ChessPiece route6TargetPiece = null;
+        List<GameObject> route6 = CreateRouteInDirection(new Vector2(x, z), new Vector2(-1, 1), out route6TargetPiece);
+        allRoutes.Add(route6, route6TargetPiece);
 
         //Back + Right
-        int backRightX = x;
-        int backRightZ = z;
-        bool backRightEnd = false;
-
-        while (!backRightEnd)
-        {
-            ++backRightX;
-            --backRightZ;
-            if (grid.TileExists(backRightX, backRightZ))
-            {
-                GameObject tile = grid.GetTile(backRightX, backRightZ);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    backRightEnd = true;
-                }
-                route7.Add(tile);
-            }
-            else
-            {
-                backRightEnd = true;
-            }
-        }
-        allRoutes.Add(route7);
+        ChessPiece route7TargetPiece = null;
+        List<GameObject> route7 = CreateRouteInDirection(new Vector2(x, z), new Vector2(1, -1), out route7TargetPiece);
+        allRoutes.Add(route7, route7TargetPiece);
 
         //Back + Left
-        int backLeftX = x;
-        int backLeftZ = z;
-        bool backLeftEnd = false;
+        ChessPiece route8TargetPiece = null;
+        List<GameObject> route8 = CreateRouteInDirection(new Vector2(x, z), new Vector2(-1, -1), out route8TargetPiece);
+        allRoutes.Add(route8, route8TargetPiece);
 
-        while (!backLeftEnd)
-        {
-            --backLeftX;
-            --backLeftZ;
-            if (grid.TileExists(backLeftX, backLeftZ))
-            {
-                GameObject tile = grid.GetTile(backLeftX, backLeftZ);
-                Teams occupation = grid.GetPieceOnTile(tile);
-
-                if (occupation == ally) break;
-
-                if (occupation == enemy)
-                {
-                    backLeftEnd = true;
-                }
-                route8.Add(tile);
-            }
-            else
-            {
-                backLeftEnd = true;
-            }
-        }
-        allRoutes.Add(route8);
-
-        foreach (List<GameObject> route in allRoutes)
+        foreach (List<GameObject> route in allRoutes.Keys)
         {
             foreach (GameObject tile in route)
             {

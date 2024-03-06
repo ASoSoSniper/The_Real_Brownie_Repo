@@ -30,22 +30,26 @@ public class ChessPiece : MonoBehaviour
     protected ChessGrid grid;
     public GameObject currentTile;
     [SerializeField] float groundCheckDistance = 8f;
-    protected List<List<GameObject>> possibleRoutes = new List<List<GameObject>>();
-    //protected Dictionary<List<GameObject>, ChessPiece> possibleRoutes = new Dictionary<List<GameObject>, ChessPiece>();
+    //protected List<List<GameObject>> possibleRoutes = new List<List<GameObject>>();
+    protected Dictionary<List<GameObject>, ChessPiece> possibleRoutes = new Dictionary<List<GameObject>, ChessPiece>();
+
+    [SerializeField] protected List<GameObject> selectedRoute = new List<GameObject>();
     protected ChessPiece targetPiece;
 
-    [SerializeField] List<GameObject> selectedRoute = new List<GameObject>();
-
-    protected int selectedRouteIndex = 0;
     protected int selectedTileIndex = 0;
     protected bool moving;
+
+    protected Teams ally;
+    protected Teams enemy;
     
 
     // Start is called before the first frame update
     void Start()
     {
         grid = FindObjectOfType<ChessGrid>();
-        
+
+        enemy = team == Teams.Black ? Teams.White : Teams.Black;
+        ally = team == Teams.Black ? Teams.Black : Teams.White;
     }
 
     // Update is called once per frame
@@ -74,16 +78,27 @@ public class ChessPiece : MonoBehaviour
         GameObject tile = grid.GetTile(gameObject);
         bool validDestination = false;
 
-        for (int i = 0; i < possibleRoutes.Count; i++)
+        foreach (KeyValuePair<List<GameObject>, ChessPiece> route in possibleRoutes)
         {
-            for (int j = 1; j < possibleRoutes[i].Count; j++)
+            for (int i = 0; i < route.Key.Count; i++)
             {
-                if (tile == possibleRoutes[i][j].transform.GetChild(0).gameObject)
+                if (tile == route.Key[i].transform.GetChild(0).gameObject)
                 {
                     if (tile == currentTile) return false;
 
-                    selectedRouteIndex = i;
-                    selectedTileIndex = j;
+                    selectedRoute = route.Key;
+
+                    ChessPiece piece = grid.GetChessPiece(tile, enemy);
+                    if (piece == route.Value || type == PieceType.Pawn)
+                    {
+                        targetPiece = route.Value;
+                    }
+                    else
+                    {
+                        targetPiece = null;
+                    }
+                    
+                    selectedTileIndex = i;
                     validDestination = true;
                     break;
                 }
@@ -92,14 +107,13 @@ public class ChessPiece : MonoBehaviour
 
         if (validDestination)
         {
-            selectedRoute = possibleRoutes[selectedRouteIndex];
             moving = true;
             return true;
         }
 
         return false;
     }
-    public virtual List<List<GameObject>> CreatePossibleRoutes()
+    public virtual Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
         possibleRoutes.Clear();
         return possibleRoutes;
@@ -110,15 +124,22 @@ public class ChessPiece : MonoBehaviour
         if (!moving) return false;
 
         Vector3 startPoint = transform.position;
-        Vector3 endPoint = possibleRoutes[selectedRouteIndex][selectedTileIndex].transform.GetChild(0).position;
+        Vector3 endPoint = selectedRoute[selectedTileIndex].transform.GetChild(0).position;
 
-        float time = moveTime * selectedTileIndex;
+        float time = moveTime / selectedTileIndex;
 
         transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
         if (Vector3.Distance(transform.position, endPoint) < 0.0001f)
         {
             currentTile = null;
             moving = false;
+
+            if (targetPiece)
+            {
+                Debug.Log("Destroyed target");
+                Destroy(targetPiece.gameObject);
+                targetPiece = null;
+            }
         }
 
         return true;
@@ -140,5 +161,65 @@ public class ChessPiece : MonoBehaviour
 
         if (currentTile == null) return;
         transform.position = currentTile.transform.position;
+    }
+
+    protected List<GameObject> CreateRouteInDirection(Vector2 initPos, Vector2 direction, out ChessPiece foundEnemy)
+    {
+        List<GameObject> route = new List<GameObject>();
+        route.Add(currentTile);
+
+        int x = (int)initPos.x;
+        int z = (int)initPos.y;
+        bool endOfDirection = false;
+        ChessPiece enemyPiece = null;
+
+        while (!endOfDirection)
+        {
+            x += (int)direction.x;
+            z += (int)direction.y;
+            if (grid.TileExists(x, z))
+            {
+                GameObject tile = grid.GetTile(x, z);
+                Teams occupation = grid.GetPieceOnTile(tile);
+                if (occupation == ally) break;
+
+                if (occupation == enemy)
+                {
+                    enemyPiece = grid.GetChessPiece(x, z, enemy);
+                    endOfDirection = true;
+                }
+                route.Add(tile);
+            }
+            else
+            {
+                endOfDirection = true;
+            }
+        }
+
+        foundEnemy = enemyPiece;
+        return route;
+    }
+
+    protected List<GameObject> CreateRoute2Point(int xPos, int zPos, out ChessPiece foundEnemy)
+    {
+        List<GameObject> route = new List<GameObject>();
+        ChessPiece enemyPiece = null;
+
+        if (grid.TileExists(xPos, zPos))
+        {
+            GameObject tile = grid.GetTile(xPos, zPos);
+            Teams occupation = grid.GetPieceOnTile(tile);
+
+            if (occupation != ally)
+            {
+                route.Add(currentTile);
+                route.Add(tile);
+
+                enemyPiece = grid.GetChessPiece(xPos, zPos, enemy);
+            }
+        }
+
+        foundEnemy = enemyPiece;
+        return route;
     }
 }
