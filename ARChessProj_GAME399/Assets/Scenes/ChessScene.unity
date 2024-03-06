@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 27109728}
   - component: {fileID: 27109727}
   - component: {fileID: 27109726}
+  - component: {fileID: 27109730}
   m_Layer: 5
   m_Name: GameCanvas
   m_TagString: Untagged
@@ -230,6 +231,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &27109730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27109725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05730195335179a4d9b8c66b669f4d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &39716434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1184,6 +1197,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4242117870698697583, guid: eeb480ddcca092b42b47752d8c23bc9c, type: 3}
   m_PrefabInstance: {fileID: 364607070}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &370095717
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977474566285723932, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3386443770425547010, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
+      propertyPath: m_Name
+      value: Arena
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 15aab1b59ea3d2f4aaca025046883055, type: 3}
 --- !u!1001 &425556937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1772,13 +1842,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 27109730}
+        m_TargetAssemblyTypeName: SceneManagementStuff, Assembly-CSharp
+        m_MethodName: SceneTransitioning
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4936,3 +5006,4 @@ SceneRoots:
   - {fileID: 1118908263}
   - {fileID: 27109729}
   - {fileID: 1334441583}
+  - {fileID: 370095717}
