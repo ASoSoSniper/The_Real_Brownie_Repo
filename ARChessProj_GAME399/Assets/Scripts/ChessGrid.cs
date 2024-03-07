@@ -93,11 +93,14 @@ public class ChessGrid : MonoBehaviour
         {
             for (int z = 0; z < Mathf.Sqrt(tiles.Length); z++)
             {
-                if (tile.transform.parent.transform.position == tiles[x, z].transform.position)
+                if (TileExists(x, z))
                 {
-                    tileX = x;
-                    tileZ = z;
-                    return;
+                    if (tile.transform.parent.transform.position == tiles[x, z].transform.position)
+                    {
+                        tileX = x;
+                        tileZ = z;
+                        return;
+                    }
                 }
             }
         }

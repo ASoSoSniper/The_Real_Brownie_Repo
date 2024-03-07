@@ -7,15 +7,19 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Android;
 using static UnityEngine.GraphicsBuffer;
+using UnityEditor;
 
 public class PieceCasting : MonoBehaviour
 {
+    [Header("UI")]
     public Button confirmSelectionButton;
+    public GameObject pawnPromotionMenu;
     private TMP_Text buttonText;
     private string initialText;
 
     private Material prevMat;
 
+    [Header("Selection")]
     [SerializeField] private GameObject objectHovered;
     [SerializeField] ChessPiece selectedChessPiece;
     ChessGrid grid;
@@ -32,6 +36,17 @@ public class PieceCasting : MonoBehaviour
     ChessPiece.Teams playerTurn = ChessPiece.Teams.White;
 
     [SerializeField] float lookSensitivity = 0.5f;
+    ChessPiece pawnToPromote = null;
+
+    [Header("Prefabs")]
+    [SerializeField] GameObject whiteKnightPrefab;
+    [SerializeField] GameObject blackKnightPrefab;
+    [SerializeField] GameObject whiteBishopPrefab;
+    [SerializeField] GameObject blackBishopPrefab;
+    [SerializeField] GameObject whiteRookPrefab;
+    [SerializeField] GameObject blackRookPrefab;
+    [SerializeField] GameObject whiteQueenPrefab;
+    [SerializeField] GameObject blackQueenPrefab;
 
     private void Start()
     {
@@ -74,6 +89,7 @@ public class PieceCasting : MonoBehaviour
                     //Debug.Log("The Raycast hit " + hit.collider.gameObject.name);
                     confirmSelectionButton.gameObject.SetActive(true);
 
+                    if (!hit.collider.gameObject) return null;
                     HoverOverObject(hit.collider.gameObject);
                 }
             }
@@ -89,12 +105,20 @@ public class PieceCasting : MonoBehaviour
     {
         if(objectHovered)
         {
-            objectHovered.GetComponent<Highlight>().SetHighlighted(false);
+            Highlight prevHighlight = objectHovered.GetComponent<Highlight>();
+            if (prevHighlight)
+            {
+                prevHighlight.SetHighlighted(false);
+            }
         }
 
         if (!gameObject) return;
 
-        gameObject.GetComponent<Highlight>().SetHighlighted(true);
+        Highlight highlight = gameObject.GetComponent<Highlight>();
+        if (highlight)
+        {
+            highlight.SetHighlighted(true);
+        }
         objectHovered = gameObject;
     }
 
@@ -117,7 +141,6 @@ public class PieceCasting : MonoBehaviour
                 if (selectedChessPiece.SelectRoute(objectHovered))
                 {
                     selectionMode = SelectionMode.Piece;
-                    NextPlayerTurn();
                 }
             }
         }
@@ -198,9 +221,48 @@ public class PieceCasting : MonoBehaviour
         }
     }
 
-    void NextPlayerTurn()
+    public void NextPlayerTurn()
     {
+        if (pawnToPromote) return;
+
         playerTurn = playerTurn == ChessPiece.Teams.White ? ChessPiece.Teams.Black : ChessPiece.Teams.White;
         if (grid) grid.ResetBoardHighlighting();
+    }
+
+    public void PawnPromotion(ChessPiece pawn)
+    {
+        if (pawnPromotionMenu) pawnPromotionMenu.SetActive(true);
+        pawnToPromote = pawn;
+    }
+
+    public void SelectPawnPromotion(ChessPiece.PieceType type)
+    {
+        GameObject pieceToSpawn = null;
+        switch (type)
+        {
+            case ChessPiece.PieceType.Knight:
+                pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteKnightPrefab : blackKnightPrefab;
+                break;
+            case ChessPiece.PieceType.Bishop:
+                pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteBishopPrefab : blackBishopPrefab;
+                break;
+            case ChessPiece.PieceType.Rook:
+                pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteRookPrefab : blackRookPrefab;
+                break;
+            case ChessPiece.PieceType.Queen:
+                pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteQueenPrefab : blackQueenPrefab;
+                break;
+        }
+
+        if (!pieceToSpawn) return;
+
+        GameObject spawn = Instantiate(pieceToSpawn, pawnToPromote.transform.parent, false);
+        spawn.transform.position = pawnToPromote.currentTile.transform.position;
+
+        Destroy(pawnToPromote.gameObject);
+        pawnToPromote = null;
+        pawnPromotionMenu.SetActive(false);
+
+        NextPlayerTurn();
     }
 }

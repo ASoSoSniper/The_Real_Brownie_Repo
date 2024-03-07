@@ -28,9 +28,10 @@ public class ChessPiece : MonoBehaviour
     [SerializeField] protected float moveTime = 0.5f;
 
     protected ChessGrid grid;
+    protected PieceCasting controller;
+
     public GameObject currentTile;
     [SerializeField] float groundCheckDistance = 8f;
-    //protected List<List<GameObject>> possibleRoutes = new List<List<GameObject>>();
     protected Dictionary<List<GameObject>, ChessPiece> possibleRoutes = new Dictionary<List<GameObject>, ChessPiece>();
 
     [SerializeField] protected List<GameObject> selectedRoute = new List<GameObject>();
@@ -43,12 +44,13 @@ public class ChessPiece : MonoBehaviour
     protected Teams enemy;
 
     [HideInInspector] public bool firstMove = false;
-    
+    [HideInInspector] public int specialMoveSpeedMod = 1;
 
     // Start is called before the first frame update
     void Start()
     {
         grid = FindObjectOfType<ChessGrid>();
+        controller = FindObjectOfType<PieceCasting>();
 
         enemy = team == Teams.Black ? Teams.White : Teams.Black;
         ally = team == Teams.Black ? Teams.Black : Teams.White;
@@ -118,8 +120,9 @@ public class ChessPiece : MonoBehaviour
 
         if (validDestination)
         {
-            moving = true;
             CastlingCheck();
+            moving = true;
+            
             return true;
         }
 
@@ -139,13 +142,14 @@ public class ChessPiece : MonoBehaviour
         Vector3 startPoint = transform.position;
         Vector3 endPoint = selectedRoute[selectedTileIndex].transform.GetChild(0).position;
 
-        float time = moveTime / selectedTileIndex;
+        float time = moveTime / (selectedTileIndex * specialMoveSpeedMod);
 
         transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
         if (Vector3.Distance(transform.position, endPoint) < 0.01f)
         {
             currentTile = null;
             moving = false;
+            specialMoveSpeedMod = 1;
 
             if (targetPiece)
             {
@@ -174,6 +178,9 @@ public class ChessPiece : MonoBehaviour
 
         if (currentTile == null) return;
         transform.position = currentTile.transform.position;
+
+        PawnPromotionCheck();
+        controller.NextPlayerTurn();
     }
 
     protected List<GameObject> CreateRouteInDirection(Vector2 initPos, Vector2 direction, out ChessPiece foundEnemy)
@@ -242,24 +249,64 @@ public class ChessPiece : MonoBehaviour
 
         Piece_King king = GetComponent<Piece_King>();
         if (!king) return false;
+        bool isPath = true;
 
-        if (selectedRoute == king.rightCastling)
+        for (int i = 0; i < selectedRoute.Count; i++)
+        {
+            if (!selectedRoute[i].Equals(king.rightCastling[i]))
+            {
+                isPath = false;
+                break;
+            }
+        }
+        if (isPath)
         {
             king.savedRightRook.selectedRoute = king.rightCastling;
             king.savedRightRook.selectedTileIndex = 1;
 
-            moving = true;
+            king.savedRightRook.specialMoveSpeedMod = 2;
+            king.savedRightRook.moving = true;
             return true;
         }
-        else if (selectedRoute == king.leftCastling)
+
+        isPath = true;
+
+        for (int i = 0; i < selectedRoute.Count; i++)
+        {
+            if (!selectedRoute[i].Equals(king.leftCastling[i]))
+            {
+                isPath = false;
+                break;
+            }
+        }
+        if (isPath)
         {
             king.savedLeftRook.selectedRoute = king.leftCastling;
             king.savedLeftRook.selectedTileIndex = 1;
 
-            moving = true;
+            king.savedLeftRook.specialMoveSpeedMod = 2;
+            king.savedLeftRook.moving = true;
             return true;
         }
         
+        return false;
+    }
+
+    bool PawnPromotionCheck()
+    {
+        if (type != PieceType.Pawn) return false;
+
+        int dir = team == Teams.Black ? 1 : -1;
+        int x = 0;
+        int z = 0;
+
+        grid.GetTileCoordinates(currentTile, out x, out z);
+        if (!grid.TileExists(x, z + dir))
+        {
+            controller.PawnPromotion(this);
+            return true;
+        }
+
         return false;
     }
 }

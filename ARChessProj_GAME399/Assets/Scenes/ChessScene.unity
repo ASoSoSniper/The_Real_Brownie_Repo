@@ -363,7 +363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -661,7 +661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1701,7 +1701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1731,7 +1731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4242117870698697583, guid: eeb480ddcca092b42b47752d8c23bc9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.2919922
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 4242117870698697583, guid: eeb480ddcca092b42b47752d8c23bc9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3086,10 +3086,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   confirmSelectionButton: {fileID: 279980958}
+  pawnPromotionMenu: {fileID: 0}
   objectHovered: {fileID: 0}
   selectedChessPiece: {fileID: 0}
   selectionMode: 0
   lookSensitivity: 0.5
+  whiteKnightPrefab: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
+  blackKnightPrefab: {fileID: 5493590853267408375, guid: cc3132d53b8e69f488129e15110095d3, type: 3}
+  whiteBishopPrefab: {fileID: 5493590853267408375, guid: ca5d5425f4f72d0409b771c4abac4ca7, type: 3}
+  blackBishopPrefab: {fileID: 5493590853267408375, guid: dc57502905d24f84dbf4b6d52941e9f4, type: 3}
+  whiteRookPrefab: {fileID: 5493590853267408375, guid: 83529480f0c7d504b932d5db9379871c, type: 3}
+  blackRookPrefab: {fileID: 5493590853267408375, guid: fa1a7a0dfae360a4686923794dfac766, type: 3}
+  whiteQueenPrefab: {fileID: 5493590853267408375, guid: d21d825a0a92f38449525725f2c99f2b, type: 3}
+  blackQueenPrefab: {fileID: 5493590853267408375, guid: 07f7faf633b04d247a3d346a87dad84f, type: 3}
 --- !u!1 &1163190638
 GameObject:
   m_ObjectHideFlags: 0
@@ -3344,7 +3353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493590853267408375, guid: d67818b114c34a54ca84e04204aa4815, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4150,7 +4159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5493590853267408375, guid: d21d825a0a92f38449525725f2c99f2b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
