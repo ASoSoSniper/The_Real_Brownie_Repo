@@ -42,6 +42,9 @@ public class PieceCasting : MonoBehaviour
 
     [SerializeField] float lookSensitivity = 0.5f;
     ChessPiece pawnToPromote = null;
+    Piece_King whiteKing = null;
+    Piece_King blackKing = null;
+    bool gameStart = false;
 
     [Header("Prefabs")]
     [SerializeField] GameObject whiteKnightPrefab;
@@ -60,6 +63,23 @@ public class PieceCasting : MonoBehaviour
 
         grid = FindObjectOfType<ChessGrid>();
         buttonSource = gameObject.GetComponent<AudioSource>();
+
+        Piece_King[] foundKings = FindObjectsOfType<Piece_King>();
+
+        for (int i = 0; i < foundKings.Length; i++)
+        {
+            switch(foundKings[i].team)
+            {
+                case ChessPiece.Teams.White:
+                    whiteKing = foundKings[i]; 
+                    break;
+                case ChessPiece.Teams.Black:
+                    blackKing = foundKings[i];
+                    break;
+            }
+        }
+
+        StartCoroutine(GameStartDelay());
     }
 
     // Update is called once per frame
@@ -232,7 +252,36 @@ public class PieceCasting : MonoBehaviour
 
     public void NextPlayerTurn()
     {
-        if (pawnToPromote) return;
+        if (pawnToPromote || !gameStart) return;
+
+        bool checkMate = false;
+        switch (playerTurn)
+        {
+            case ChessPiece.Teams.White:
+                if (!blackKing || blackKing.InCheckMate())
+                {
+                    checkMate = true;
+                    Debug.Log("White wins!");
+                    break;
+                }
+                if (blackKing.InCheck())
+                {
+                    Debug.Log("Black is in check");
+                }
+                break;
+            case ChessPiece.Teams.Black:
+                if (!whiteKing || whiteKing.InCheckMate())
+                {
+                    checkMate = true;
+                    Debug.Log("Black wins!");
+                    break;
+                }
+                if (whiteKing.InCheck())
+                {
+                    Debug.Log("White is in check");
+                }
+                break;
+        }
 
         playerTurn = playerTurn == ChessPiece.Teams.White ? ChessPiece.Teams.Black : ChessPiece.Teams.White;
         if (grid) grid.ResetBoardHighlighting();
@@ -275,5 +324,12 @@ public class PieceCasting : MonoBehaviour
         pawnPromotionMenu.SetActive(false);
 
         NextPlayerTurn();
+    }
+
+    IEnumerator GameStartDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        gameStart = true;
     }
 }
