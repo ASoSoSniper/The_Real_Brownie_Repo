@@ -93,6 +93,7 @@ MonoBehaviour:
   groundCheckDistance: 8
   selectedRoute: []
   firstMove: 0
+  specialMoveSpeedMod: 1
   explosionParticle: {fileID: 8298665927846808378, guid: dc2a17f7363dbf14899ce14f1e4a013a, type: 3}
   deathClip: {fileID: 8300000, guid: a973e1bd6c4ca1e4b9183517ce4c66ad, type: 3}
   moveClip: {fileID: 8300000, guid: b8a191f94547955459d0e34aa3f5c1c1, type: 3}
@@ -112,7 +113,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
