@@ -46,6 +46,14 @@ public class ChessPiece : MonoBehaviour
     [HideInInspector] public bool firstMove = false;
     [HideInInspector] public int specialMoveSpeedMod = 1;
 
+
+    public GameObject explosionParticle;
+
+    public AudioClip deathClip;
+    public AudioClip moveClip;
+    public AudioClip attackClip;
+    private AudioSource pieceSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +62,8 @@ public class ChessPiece : MonoBehaviour
 
         enemy = team == Teams.Black ? Teams.White : Teams.Black;
         ally = team == Teams.Black ? Teams.Black : Teams.White;
+
+        pieceSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -104,11 +114,16 @@ public class ChessPiece : MonoBehaviour
                     ChessPiece piece = grid.GetChessPiece(tile, enemy);
                     if (piece == route.Value || type == PieceType.Pawn)
                     {
+                        if (targetPiece != null)
+                        {
+                            pieceSource.PlayOneShot(attackClip);
+                        }
                         targetPiece = route.Value;
                     }
                     else
                     {
                         targetPiece = null;
+                        pieceSource.PlayOneShot(moveClip);
                     }
                     
                     selectedTileIndex = i;
@@ -154,8 +169,7 @@ public class ChessPiece : MonoBehaviour
             if (targetPiece)
             {
                 Debug.Log("Destroyed target");
-                Destroy(targetPiece.gameObject);
-                targetPiece = null;
+                DestroyLogic(targetPiece.gameObject);
             }
         }
 
@@ -292,6 +306,7 @@ public class ChessPiece : MonoBehaviour
         return false;
     }
 
+
     bool PawnPromotionCheck()
     {
         if (type != PieceType.Pawn) return false;
@@ -308,5 +323,14 @@ public class ChessPiece : MonoBehaviour
         }
 
         return false;
+    }
+
+    void DestroyLogic(GameObject pieceToDestroy)
+    {
+        GameObject particle = Instantiate(explosionParticle, transform.position, transform.rotation);
+        particle.GetComponent<AudioSource>().PlayOneShot(deathClip);
+
+        Destroy(pieceToDestroy);
+        targetPiece = null;
     }
 }

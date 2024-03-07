@@ -26,6 +26,11 @@ public class PieceCasting : MonoBehaviour
 
     RaycastHit hit;
 
+    private AudioSource buttonSource;
+    public AudioClip selectClip;
+    public AudioClip unselectClip;
+    public AudioClip nextTurnClip;
+
     public enum SelectionMode
     {
         Piece,
@@ -54,6 +59,7 @@ public class PieceCasting : MonoBehaviour
         initialText = confirmSelectionButton.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text;
 
         grid = FindObjectOfType<ChessGrid>();
+        buttonSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -133,6 +139,7 @@ public class PieceCasting : MonoBehaviour
             selectedChessPiece = piece;
             selectedChessPiece.SelectPiece();
             selectionMode = SelectionMode.Tile;
+            buttonSource.PlayOneShot(selectClip);
         }
         else if (!piece && selectionMode == SelectionMode.Tile)
         {
@@ -218,6 +225,8 @@ public class PieceCasting : MonoBehaviour
             selectionMode = SelectionMode.Piece;
             ChangeButtonText();
             if (grid) grid.ResetBoardHighlighting();
+
+            buttonSource.PlayOneShot(unselectClip);
         }
     }
 
@@ -227,6 +236,8 @@ public class PieceCasting : MonoBehaviour
 
         playerTurn = playerTurn == ChessPiece.Teams.White ? ChessPiece.Teams.Black : ChessPiece.Teams.White;
         if (grid) grid.ResetBoardHighlighting();
+
+        buttonSource.PlayOneShot(nextTurnClip);
     }
 
     public void PawnPromotion(ChessPiece pawn)
