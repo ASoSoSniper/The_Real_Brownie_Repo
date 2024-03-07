@@ -186,6 +186,30 @@ public class Piece_King : ChessPiece
         return false;
     }
 
+    bool TileUnderAttack(GameObject tileToCheck)
+    {
+        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
+
+        for (int i = 0; i < allPieces.Length; i++)
+        {
+            if (allPieces[i].team != enemy || allPieces[i] == this ||
+                (allPieces[i].type == PieceType.King && !allPieces[i].firstMove)) continue;
+
+            Dictionary<List<GameObject>, ChessPiece> routes = allPieces[i].CreatePossibleRoutes();
+            foreach (List<GameObject> route in routes.Keys)
+            {
+                foreach (GameObject tile in route)
+                {
+                    if (tile == tileToCheck)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public bool InCheck()
     {
         ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
@@ -204,6 +228,33 @@ public class Piece_King : ChessPiece
                 }
             }
         }
+        return false;
+    }
+
+    public bool InCheckMate()
+    {
+        bool inCheck = InCheck();
+        Dictionary<List<GameObject>, ChessPiece> routes = CreatePossibleRoutes();
+
+        bool notInCheckMate = false;
+
+        foreach (List<GameObject> tiles in routes.Keys)
+        {
+            foreach (GameObject tile in tiles)
+            {
+                if (!TileUnderAttack(tile))
+                {
+                    notInCheckMate = true;
+                }
+            }
+        }
+
+        if (inCheck && !notInCheckMate)
+        {
+            Debug.Log("CheckMate");
+            return true;
+        }
+
         return false;
     }
 }
