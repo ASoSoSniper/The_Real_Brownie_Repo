@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Piece_Pawn : ChessPiece
 {
-    int moveCount = 0;
+    [HideInInspector] public int moveCount = 0;
     public override Dictionary<List<GameObject>, ChessPiece> CreatePossibleRoutes()
     {
         Dictionary<List<GameObject>, ChessPiece> allRoutes = new Dictionary<List<GameObject>, ChessPiece>();

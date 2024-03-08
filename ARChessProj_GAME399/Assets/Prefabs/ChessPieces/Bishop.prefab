@@ -87,12 +87,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
-  team: 0
+  team: 1
   moveTime: 10
   currentTile: {fileID: 0}
   groundCheckDistance: 8
   selectedRoute: []
   firstMove: 0
+  specialMoveSpeedMod: 1
   explosionParticle: {fileID: 8298665927846808378, guid: 1fb6b9652b678184ca90150c87818fe2, type: 3}
   deathClip: {fileID: 8300000, guid: ea53f7ca71e3fb546892f83b6b9ef0e5, type: 3}
   moveClip: {fileID: 8300000, guid: 1b2098c5d5bd71e41a6acfba856124af, type: 3}

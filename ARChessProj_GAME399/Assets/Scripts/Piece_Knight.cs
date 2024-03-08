@@ -90,6 +90,12 @@ public class Piece_Knight : ChessPiece
                     currentTile = null;
                     movePhase = 0;
                     moving = false;
+
+                    if (targetPiece)
+                    {
+                        Debug.Log("Destroyed target");
+                        DestroyLogic(targetPiece.gameObject);
+                    }
                 }
                 break;
 

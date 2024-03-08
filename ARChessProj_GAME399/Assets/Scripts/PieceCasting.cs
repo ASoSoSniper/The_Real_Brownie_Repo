@@ -16,6 +16,11 @@ public class PieceCasting : MonoBehaviour
     public GameObject pawnPromotionMenu;
     private TMP_Text buttonText;
     private string initialText;
+    [SerializeField] Sprite blueTurn;
+    [SerializeField] Sprite redTurn;
+    [SerializeField] Sprite grayTurn;
+    [SerializeField] Image blueTurnBox;
+    [SerializeField] Image redTurnBox;
 
     private Material prevMat;
 
@@ -34,7 +39,8 @@ public class PieceCasting : MonoBehaviour
     public enum SelectionMode
     {
         Piece,
-        Tile
+        Tile,
+        Observe
     }
     public SelectionMode selectionMode = SelectionMode.Piece;
 
@@ -45,6 +51,7 @@ public class PieceCasting : MonoBehaviour
     Piece_King whiteKing = null;
     Piece_King blackKing = null;
     bool gameStart = false;
+    bool turnSwitched = false;
 
     [Header("Prefabs")]
     [SerializeField] GameObject whiteKnightPrefab;
@@ -138,7 +145,7 @@ public class PieceCasting : MonoBehaviour
             }
         }
 
-        if (!gameObject) return;
+        if (!gameObject || selectionMode == SelectionMode.Observe) return;
 
         Highlight highlight = gameObject.GetComponent<Highlight>();
         if (highlight)
@@ -167,7 +174,8 @@ public class PieceCasting : MonoBehaviour
             {
                 if (selectedChessPiece.SelectRoute(objectHovered))
                 {
-                    selectionMode = SelectionMode.Piece;
+                    selectionMode = SelectionMode.Observe;
+                    turnSwitched = false;
                 }
             }
         }
@@ -252,7 +260,17 @@ public class PieceCasting : MonoBehaviour
 
     public void NextPlayerTurn()
     {
-        if (pawnToPromote || !gameStart) return;
+        if (pawnToPromote || !gameStart || turnSwitched) return;
+
+        
+        if (blackKing.InCheck())
+        {
+            Debug.Log("Black is in check");
+        }
+        if (whiteKing.InCheck())
+        {
+            Debug.Log("White is in check");
+        }
 
         bool checkMate = false;
         switch (playerTurn)
@@ -264,10 +282,7 @@ public class PieceCasting : MonoBehaviour
                     Debug.Log("White wins!");
                     break;
                 }
-                if (blackKing.InCheck())
-                {
-                    Debug.Log("Black is in check");
-                }
+                
                 break;
             case ChessPiece.Teams.Black:
                 if (!whiteKing || whiteKing.InCheckMate())
@@ -276,17 +291,19 @@ public class PieceCasting : MonoBehaviour
                     Debug.Log("Black wins!");
                     break;
                 }
-                if (whiteKing.InCheck())
-                {
-                    Debug.Log("White is in check");
-                }
+                
                 break;
         }
 
         playerTurn = playerTurn == ChessPiece.Teams.White ? ChessPiece.Teams.Black : ChessPiece.Teams.White;
+        TurnDisplay();
+
         if (grid) grid.ResetBoardHighlighting();
+        EnPassantExpiration();
 
         buttonSource.PlayOneShot(nextTurnClip);
+        selectionMode = SelectionMode.Piece;
+        turnSwitched = true;
     }
 
     public void PawnPromotion(ChessPiece pawn)
@@ -295,21 +312,21 @@ public class PieceCasting : MonoBehaviour
         pawnToPromote = pawn;
     }
 
-    public void SelectPawnPromotion(ChessPiece.PieceType type)
+    public void SelectPawnPromotion(int type)
     {
         GameObject pieceToSpawn = null;
         switch (type)
         {
-            case ChessPiece.PieceType.Knight:
+            case 0:
                 pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteKnightPrefab : blackKnightPrefab;
                 break;
-            case ChessPiece.PieceType.Bishop:
+            case 1:
                 pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteBishopPrefab : blackBishopPrefab;
                 break;
-            case ChessPiece.PieceType.Rook:
+            case 2:
                 pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteRookPrefab : blackRookPrefab;
                 break;
-            case ChessPiece.PieceType.Queen:
+            case 3:
                 pieceToSpawn = playerTurn == ChessPiece.Teams.White ? whiteQueenPrefab : blackQueenPrefab;
                 break;
         }
@@ -318,12 +335,13 @@ public class PieceCasting : MonoBehaviour
 
         GameObject spawn = Instantiate(pieceToSpawn, pawnToPromote.transform.parent, false);
         spawn.transform.position = pawnToPromote.currentTile.transform.position;
+        spawn.GetComponent<ChessPiece>().currentTile = pawnToPromote.currentTile;
 
         Destroy(pawnToPromote.gameObject);
         pawnToPromote = null;
         pawnPromotionMenu.SetActive(false);
 
-        NextPlayerTurn();
+        StartCoroutine(PlayerTurnSwitchDelay());
     }
 
     IEnumerator GameStartDelay()
@@ -331,5 +349,37 @@ public class PieceCasting : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         gameStart = true;
+        TurnDisplay();
+    }
+    IEnumerator PlayerTurnSwitchDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        NextPlayerTurn();
+    }
+
+    void EnPassantExpiration()
+    {
+        Piece_Pawn[] pawns = FindObjectsOfType<Piece_Pawn>();
+
+        for (int i = 0; i < pawns.Length; i++)
+        {
+            if (pawns[i].team == playerTurn) pawns[i].moveCount = 0;
+        }
+    }
+
+    void TurnDisplay()
+    {
+        switch (playerTurn)
+        {
+            case ChessPiece.Teams.White:
+                blueTurnBox.sprite = blueTurn;
+                redTurnBox.sprite = grayTurn;
+                break;
+            case ChessPiece.Teams.Black:
+                blueTurnBox.sprite = grayTurn;
+                redTurnBox.sprite = redTurn;
+                break;
+        }
     }
 }

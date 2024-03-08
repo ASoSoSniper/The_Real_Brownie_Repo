@@ -157,10 +157,10 @@ public class ChessPiece : MonoBehaviour
         Vector3 startPoint = transform.position;
         Vector3 endPoint = selectedRoute[selectedTileIndex].transform.GetChild(0).position;
 
-        float time = moveTime / (selectedTileIndex * specialMoveSpeedMod);
+        float time = moveTime / (Mathf.Min(selectedTileIndex, 3) * specialMoveSpeedMod);
 
         transform.position = Vector3.Lerp(startPoint, endPoint, time * Time.deltaTime);
-        if (Vector3.Distance(transform.position, endPoint) < 0.01f)
+        if (Vector3.Distance(transform.position, endPoint) < 0.1f)
         {
             currentTile = null;
             moving = false;
@@ -263,44 +263,51 @@ public class ChessPiece : MonoBehaviour
 
         Piece_King king = GetComponent<Piece_King>();
         if (!king) return false;
+
         bool isPath = true;
 
-        for (int i = 0; i < selectedRoute.Count; i++)
+        if (king.rightCastling != null)
         {
-            if (!selectedRoute[i].Equals(king.rightCastling[i]))
+            for (int i = 0; i < selectedRoute.Count; i++)
             {
-                isPath = false;
-                break;
+                if (!selectedRoute[i].Equals(king.rightCastling[i]))
+                {
+                    isPath = false;
+                    break;
+                }
             }
-        }
-        if (isPath)
-        {
-            king.savedRightRook.selectedRoute = king.rightCastling;
-            king.savedRightRook.selectedTileIndex = 1;
+            if (isPath)
+            {
+                king.savedRightRook.selectedRoute = king.rightCastling;
+                king.savedRightRook.selectedTileIndex = 1;
 
-            king.savedRightRook.specialMoveSpeedMod = 2;
-            king.savedRightRook.moving = true;
-            return true;
+                king.savedRightRook.specialMoveSpeedMod = 2;
+                king.savedRightRook.moving = true;
+                return true;
+            }
         }
 
         isPath = true;
 
-        for (int i = 0; i < selectedRoute.Count; i++)
+        if (king.leftCastling != null)
         {
-            if (!selectedRoute[i].Equals(king.leftCastling[i]))
+            for (int i = 0; i < selectedRoute.Count; i++)
             {
-                isPath = false;
-                break;
+                if (!selectedRoute[i].Equals(king.leftCastling[i]))
+                {
+                    isPath = false;
+                    break;
+                }
             }
-        }
-        if (isPath)
-        {
-            king.savedLeftRook.selectedRoute = king.leftCastling;
-            king.savedLeftRook.selectedTileIndex = 1;
+            if (isPath)
+            {
+                king.savedLeftRook.selectedRoute = king.leftCastling;
+                king.savedLeftRook.selectedTileIndex = 1;
 
-            king.savedLeftRook.specialMoveSpeedMod = 2;
-            king.savedLeftRook.moving = true;
-            return true;
+                king.savedLeftRook.specialMoveSpeedMod = 2;
+                king.savedLeftRook.moving = true;
+                return true;
+            }
         }
         
         return false;
@@ -325,7 +332,7 @@ public class ChessPiece : MonoBehaviour
         return false;
     }
 
-    void DestroyLogic(GameObject pieceToDestroy)
+    protected void DestroyLogic(GameObject pieceToDestroy)
     {
         GameObject particle = Instantiate(explosionParticle, transform.position, transform.rotation);
         particle.GetComponent<AudioSource>().PlayOneShot(deathClip);
