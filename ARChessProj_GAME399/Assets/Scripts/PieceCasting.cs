@@ -13,9 +13,17 @@ public class PieceCasting : MonoBehaviour
 {
     [Header("UI")]
     public Button confirmSelectionButton;
+    public Button cancelSelectionButton;
     public GameObject pawnPromotionMenu;
+    public GameObject turnUI;
+    public GameObject reticle;
     private TMP_Text buttonText;
     private string initialText;
+
+    [SerializeField] GameObject victoryScreen;
+    [SerializeField] GameObject blueVictory;
+    [SerializeField] GameObject redVictory;
+
     [SerializeField] Sprite blueTurn;
     [SerializeField] Sprite redTurn;
     [SerializeField] Sprite grayTurn;
@@ -295,6 +303,12 @@ public class PieceCasting : MonoBehaviour
                 break;
         }
 
+        if (checkMate)
+        {
+            EndGame();
+            return;
+        }
+
         playerTurn = playerTurn == ChessPiece.Teams.White ? ChessPiece.Teams.Black : ChessPiece.Teams.White;
         TurnDisplay();
 
@@ -379,6 +393,29 @@ public class PieceCasting : MonoBehaviour
             case ChessPiece.Teams.Black:
                 blueTurnBox.sprite = grayTurn;
                 redTurnBox.sprite = redTurn;
+                break;
+        }
+    }
+
+    void EndGame()
+    {
+        selectionMode = SelectionMode.Observe;
+
+        victoryScreen.SetActive(true);
+
+        confirmSelectionButton.gameObject.SetActive(false);
+        cancelSelectionButton.gameObject.SetActive(false);
+        turnUI.SetActive(false);
+        reticle.SetActive(false);
+        pawnPromotionMenu.SetActive(false);
+
+        switch (playerTurn)
+        {
+            case ChessPiece.Teams.White:
+                blueVictory.SetActive(true);
+                break;
+            case ChessPiece.Teams.Black:
+                redVictory.SetActive(true);
                 break;
         }
     }

@@ -240,12 +240,9 @@ public class Piece_King : ChessPiece
 
         foreach (List<GameObject> tiles in routes.Keys)
         {
-            foreach (GameObject tile in tiles)
+            if (!TileUnderAttack(tiles[tiles.Count - 1]))
             {
-                if (!TileUnderAttack(tile))
-                {
-                    notInCheckMate = true;
-                }
+                notInCheckMate = true;
             }
         }
 
