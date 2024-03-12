@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Piece_King : ChessPiece
@@ -186,30 +187,6 @@ public class Piece_King : ChessPiece
         return false;
     }
 
-    bool TileUnderAttack(GameObject tileToCheck)
-    {
-        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
-
-        for (int i = 0; i < allPieces.Length; i++)
-        {
-            if (allPieces[i].team != enemy || allPieces[i] == this ||
-                (allPieces[i].type == PieceType.King && !allPieces[i].firstMove)) continue;
-
-            Dictionary<List<GameObject>, ChessPiece> routes = allPieces[i].CreatePossibleRoutes();
-            foreach (List<GameObject> route in routes.Keys)
-            {
-                foreach (GameObject tile in route)
-                {
-                    if (tile == tileToCheck)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     public bool InCheck()
     {
         ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
@@ -238,15 +215,35 @@ public class Piece_King : ChessPiece
 
         bool notInCheckMate = false;
 
+        List<ChessPiece> allAttackingPieces = new List<ChessPiece>();
         foreach (List<GameObject> tiles in routes.Keys)
         {
-            if (!TileUnderAttack(tiles[tiles.Count - 1]))
+            List<ChessPiece> attackingPieces = new List<ChessPiece>();
+
+            if (!TileUnderAttack(tiles[tiles.Count - 1], out attackingPieces))
             {
                 notInCheckMate = true;
             }
+            else
+            {
+                foreach (ChessPiece piece in attackingPieces)
+                {
+                    if (!allAttackingPieces.Contains(piece))
+                        allAttackingPieces.Add(piece);
+                }
+            }
         }
 
-        if (inCheck && !notInCheckMate)
+        int vulnerableAttackers = 0;
+        foreach (ChessPiece attacker in allAttackingPieces)
+        {
+            if (attacker.TileUnderAttack(attacker.currentTile))
+            {
+                ++vulnerableAttackers;
+            }
+        }
+
+        if (inCheck && !notInCheckMate && vulnerableAttackers < 2)
         {
             Debug.Log("CheckMate");
             return true;

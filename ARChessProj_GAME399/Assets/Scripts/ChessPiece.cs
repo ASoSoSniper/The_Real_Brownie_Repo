@@ -340,4 +340,56 @@ public class ChessPiece : MonoBehaviour
         Destroy(pieceToDestroy);
         targetPiece = null;
     }
+
+    public virtual bool TileUnderAttack(GameObject tileToCheck)
+    {
+        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
+
+        for (int i = 0; i < allPieces.Length; i++)
+        {
+            if (allPieces[i].team != enemy || allPieces[i] == this ||
+                (allPieces[i].type == PieceType.King && !allPieces[i].firstMove)) continue;
+
+            Dictionary<List<GameObject>, ChessPiece> routes = allPieces[i].CreatePossibleRoutes();
+            foreach (List<GameObject> route in routes.Keys)
+            {
+                foreach (GameObject tile in route)
+                {
+                    if (tile == tileToCheck)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    protected virtual bool TileUnderAttack(GameObject tileToCheck, out List<ChessPiece> attackers)
+    {
+        bool underAttack = false;
+        attackers = new List<ChessPiece>();
+
+        ChessPiece[] allPieces = FindObjectsOfType<ChessPiece>();
+
+        for (int i = 0; i < allPieces.Length; i++)
+        {
+            if (allPieces[i].team != enemy || allPieces[i] == this ||
+                (allPieces[i].type == PieceType.King && !allPieces[i].firstMove)) continue;
+
+            Dictionary<List<GameObject>, ChessPiece> routes = allPieces[i].CreatePossibleRoutes();
+            foreach (List<GameObject> route in routes.Keys)
+            {
+                foreach (GameObject tile in route)
+                {
+                    if (tile == tileToCheck)
+                    {
+                        underAttack = true;
+                        attackers.Add(allPieces[i]);
+                    }
+                }
+            }
+        }
+        return underAttack;
+    }
 }

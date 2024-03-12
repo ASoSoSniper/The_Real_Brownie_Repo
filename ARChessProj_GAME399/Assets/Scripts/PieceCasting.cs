@@ -308,7 +308,7 @@ public class PieceCasting : MonoBehaviour
         switch (playerTurn)
         {
             case ChessPiece.Teams.White:
-                if (!blackKing || blackKing.InCheckMate())
+                if (!blackKing /*|| blackKing.InCheckMate()*/)
                 {
                     checkMate = true;
                     Debug.Log("White wins!");
@@ -317,7 +317,7 @@ public class PieceCasting : MonoBehaviour
 
                 break;
             case ChessPiece.Teams.Black:
-                if (!whiteKing || whiteKing.InCheckMate())
+                if (!whiteKing /*|| whiteKing.InCheckMate()*/)
                 {
                     checkMate = true;
                     Debug.Log("Black wins!");
