@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ChessScene.unity
     guid: 36561ad8611fbd14a9c055d0270ae672
-  m_configObjects: {}
+  m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 9adc7b174f3eb3942bbde6b16cc3adf2, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: c051c76b87164634abd68c86f5a87001, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 8dbd05214dd155c4e9244bb3ce9f6ea7, type: 2}

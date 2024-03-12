@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+  <Tracking>
+    <ImageTarget name="ChessLogo24" size="8.000000 8.000000" />
+    <ImageTarget name="TempMMBG_RGB" size="4.000000 4.012308" />
+    <ImageTarget name="Graveyard" size="4.000000 2.250000" />
+    <ImageTarget name="dark-graveyard" size="4.000000 2.250000" />
+  </Tracking>
+</QCARConfig>

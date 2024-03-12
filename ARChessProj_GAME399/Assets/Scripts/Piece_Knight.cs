@@ -62,7 +62,7 @@ public class Piece_Knight : ChessPiece
         {
             case 0:
                 Vector3 raiseStart = transform.position;
-                Vector3 raiseEnd = currentTile.transform.position + Vector3.up * raiseHeight;
+                Vector3 raiseEnd = currentTile.transform.position + transform.up * raiseHeight;
                 transform.position = Vector3.Lerp(raiseStart, raiseEnd, raiseTime * Time.deltaTime);
 
                 if (Vector3.Distance(transform.position, raiseEnd) < 0.1f)
@@ -72,7 +72,7 @@ public class Piece_Knight : ChessPiece
                 break;
             case 1:
                 Vector3 startPoint = transform.position;
-                Vector3 endPoint = selectedRoute[selectedTileIndex].transform.GetChild(0).position + Vector3.up * raiseHeight;
+                Vector3 endPoint = selectedRoute[selectedTileIndex].transform.GetChild(0).position + transform.up * raiseHeight;
 
                 transform.position = Vector3.Lerp(startPoint, endPoint, moveTime * Time.deltaTime);
                 if (Vector3.Distance(transform.position, endPoint) < 0.1f)

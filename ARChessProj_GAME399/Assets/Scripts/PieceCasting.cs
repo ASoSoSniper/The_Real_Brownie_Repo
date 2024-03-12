@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
 using UnityEngine;
-using Unity.UI;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Android;

@@ -187,7 +187,7 @@ public class ChessPiece : MonoBehaviour
         RaycastHit rayHit;
         Ray ray = new Ray();
         ray.origin = transform.position + Vector3.up * 2f;
-        ray.direction = Vector3.down;
+        ray.direction = -transform.up;
 
         bool hit = Physics.Raycast(ray, out rayHit, groundCheckDistance);
         Debug.DrawLine(ray.origin, ray.origin + Vector3.down * groundCheckDistance, Color.red, 0.5f);
