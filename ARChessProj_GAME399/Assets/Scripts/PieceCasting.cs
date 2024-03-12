@@ -60,6 +60,7 @@ public class PieceCasting : MonoBehaviour
     Piece_King blackKing = null;
     bool gameStart = false;
     bool turnSwitched = false;
+    bool attemptingToTurnSwitch = false;
 
     [Header("Prefabs")]
     [SerializeField] GameObject whiteKnightPrefab;
@@ -114,6 +115,26 @@ public class PieceCasting : MonoBehaviour
         }
 
         CameraMovement();
+
+        if (attemptingToTurnSwitch)
+        {
+            if (AllPiecesHaveTiles())
+            {
+                AttemptTurnTransition();
+            }
+        }
+    }
+
+    bool AllPiecesHaveTiles()
+    {
+        ChessPiece[] pieces = FindObjectsOfType<ChessPiece>();
+
+        for (int i = 0; i < pieces.Length; i++) 
+        {
+            if (!pieces[i].currentTile) return false;
+        }
+
+        return true;
     }
 
     GameObject CastingForPieces()
@@ -268,9 +289,12 @@ public class PieceCasting : MonoBehaviour
 
     public void NextPlayerTurn()
     {
-        if (pawnToPromote || !gameStart || turnSwitched) return;
+        if (!gameStart) return;
+        attemptingToTurnSwitch = true;
+    }
 
-        
+    void AttemptTurnTransition()
+    {
         if (blackKing.InCheck())
         {
             Debug.Log("Black is in check");
@@ -290,7 +314,7 @@ public class PieceCasting : MonoBehaviour
                     Debug.Log("White wins!");
                     break;
                 }
-                
+
                 break;
             case ChessPiece.Teams.Black:
                 if (!whiteKing || whiteKing.InCheckMate())
@@ -299,7 +323,7 @@ public class PieceCasting : MonoBehaviour
                     Debug.Log("Black wins!");
                     break;
                 }
-                
+
                 break;
         }
 
@@ -308,6 +332,8 @@ public class PieceCasting : MonoBehaviour
             EndGame();
             return;
         }
+
+        if (pawnToPromote || !gameStart || turnSwitched) return;
 
         playerTurn = playerTurn == ChessPiece.Teams.White ? ChessPiece.Teams.Black : ChessPiece.Teams.White;
         TurnDisplay();
@@ -318,6 +344,7 @@ public class PieceCasting : MonoBehaviour
         buttonSource.PlayOneShot(nextTurnClip);
         selectionMode = SelectionMode.Piece;
         turnSwitched = true;
+        attemptingToTurnSwitch = false;
     }
 
     public void PawnPromotion(ChessPiece pawn)
