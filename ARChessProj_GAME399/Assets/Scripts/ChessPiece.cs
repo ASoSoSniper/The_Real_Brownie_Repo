@@ -114,16 +114,11 @@ public class ChessPiece : MonoBehaviour
                     ChessPiece piece = grid.GetChessPiece(tile, enemy);
                     if (piece == route.Value || type == PieceType.Pawn)
                     {
-                        if (targetPiece != null)
-                        {
-                            pieceSource.PlayOneShot(attackClip);
-                        }
                         targetPiece = route.Value;
                     }
                     else
                     {
                         targetPiece = null;
-                        pieceSource.PlayOneShot(moveClip);
                     }
                     
                     selectedTileIndex = i;
@@ -137,6 +132,17 @@ public class ChessPiece : MonoBehaviour
         {
             CastlingCheck();
             moving = true;
+
+            if (targetPiece)
+            {
+                pieceSource.PlayOneShot(attackClip);
+                Debug.Log("Attacked");
+            }
+            else
+            {
+                pieceSource.PlayOneShot(moveClip);
+                Debug.Log("Moved");
+            }
             
             return true;
         }

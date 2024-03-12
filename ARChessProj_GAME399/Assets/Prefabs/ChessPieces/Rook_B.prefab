@@ -93,9 +93,10 @@ MonoBehaviour:
   groundCheckDistance: 8
   selectedRoute: []
   firstMove: 0
+  specialMoveSpeedMod: 1
   explosionParticle: {fileID: 8298665927846808378, guid: dc2a17f7363dbf14899ce14f1e4a013a, type: 3}
   deathClip: {fileID: 8300000, guid: 77cf00b6e5046034a85a11df17fee93d, type: 3}
-  moveClip: {fileID: 8300000, guid: b8a191f94547955459d0e34aa3f5c1c1, type: 3}
+  moveClip: {fileID: 8300000, guid: 1e3134a4f7270c748b2d22bfa203c2dc, type: 3}
   attackClip: {fileID: 8300000, guid: 99f87a09a2e700d4e939a47317c9bdcc, type: 3}
 --- !u!82 &-4059181233981758388
 AudioSource:

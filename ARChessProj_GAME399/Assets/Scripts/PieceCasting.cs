@@ -43,6 +43,7 @@ public class PieceCasting : MonoBehaviour
     public AudioClip selectClip;
     public AudioClip unselectClip;
     public AudioClip nextTurnClip;
+    public AudioClip checkClip;
 
     public enum SelectionMode
     {
@@ -298,10 +299,12 @@ public class PieceCasting : MonoBehaviour
         if (blackKing.InCheck())
         {
             Debug.Log("Black is in check");
+            buttonSource.PlayOneShot(checkClip);
         }
         if (whiteKing.InCheck())
         {
             Debug.Log("White is in check");
+            buttonSource.PlayOneShot(checkClip);
         }
 
         bool checkMate = false;

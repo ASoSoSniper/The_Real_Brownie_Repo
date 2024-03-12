@@ -93,9 +93,10 @@ MonoBehaviour:
   groundCheckDistance: 8
   selectedRoute: []
   firstMove: 0
+  specialMoveSpeedMod: 1
   explosionParticle: {fileID: 8298665927846808378, guid: 1fb6b9652b678184ca90150c87818fe2, type: 3}
   deathClip: {fileID: 8300000, guid: d418f15f6e0ecb14fb443de234a12cda, type: 3}
-  moveClip: {fileID: 8300000, guid: 1b2098c5d5bd71e41a6acfba856124af, type: 3}
+  moveClip: {fileID: 8300000, guid: 1e3134a4f7270c748b2d22bfa203c2dc, type: 3}
   attackClip: {fileID: 8300000, guid: e80d610c833064a4196c3c4d18282cc2, type: 3}
   raiseHeight: 10
   raiseTime: 10

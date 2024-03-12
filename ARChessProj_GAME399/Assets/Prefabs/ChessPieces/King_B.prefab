@@ -96,7 +96,7 @@ MonoBehaviour:
   specialMoveSpeedMod: 1
   explosionParticle: {fileID: 8298665927846808378, guid: dc2a17f7363dbf14899ce14f1e4a013a, type: 3}
   deathClip: {fileID: 8300000, guid: a973e1bd6c4ca1e4b9183517ce4c66ad, type: 3}
-  moveClip: {fileID: 8300000, guid: b8a191f94547955459d0e34aa3f5c1c1, type: 3}
+  moveClip: {fileID: 8300000, guid: 1e3134a4f7270c748b2d22bfa203c2dc, type: 3}
   attackClip: {fileID: 8300000, guid: ee3b9925e4c205940bc39b575f1f3d32, type: 3}
   savedLeftRook: {fileID: 0}
   savedRightRook: {fileID: 0}
