@@ -93,8 +93,6 @@ public class PieceCasting : MonoBehaviour
                     break;
             }
         }
-
-        StartCoroutine(GameStartDelay());
     }
 
     // Update is called once per frame
@@ -134,6 +132,11 @@ public class PieceCasting : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void StartGame()
+    {
+        StartCoroutine(GameStartDelay());
     }
 
     GameObject CastingForPieces()
